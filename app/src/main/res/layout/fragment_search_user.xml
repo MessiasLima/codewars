@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="@dimen/dialog_default_horizontal_padding"
+    android:paddingTop="@dimen/dialog_default_vertical_padding"
+    android:paddingEnd="@dimen/dialog_default_horizontal_padding"
+    tools:context=".ui.users.SearchUserDialogFragment">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/searchDialodInputLayout"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/user_search_field_placeholder"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/userSearchEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/searchDialogButton"
+        style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/search"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/searchDialodInputLayout" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -22,13 +22,14 @@
             android:layout_height="wrap_content">
 
             <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/postsToolbar"
+                android:id="@+id/usersToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_scrollFlags="scroll|enterAlways|snap"
+                app:menu="@menu/menu_users"
                 app:title="@string/app_name" />
 
         </com.google.android.material.appbar.AppBarLayout>

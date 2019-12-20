@@ -7,8 +7,9 @@ import android.view.ViewGroup
 import io.github.messiaslima.codewars.R
 import io.github.messiaslima.codewars.databinding.FragmentUsersBinding
 import io.github.messiaslima.codewars.ui.shared.BaseFragment
+import kotlinx.android.synthetic.main.fragment_users.*
 
-class UsersFragment : BaseFragment() {
+class UsersFragment : BaseFragment(), SearchUserDialogFragment.OnSearchUserListener {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -21,5 +22,28 @@ class UsersFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupMenuListener()
+    }
+
+    private fun setupMenuListener() {
+        usersToolbar.setOnMenuItemClickListener { itemClicked ->
+
+            if (itemClicked.itemId == R.id.menu_item_users_search) {
+                showSearchToolbar()
+                return@setOnMenuItemClickListener true
+            }
+
+            return@setOnMenuItemClickListener false
+        }
+    }
+
+    override fun onSearchUser(username: String) {
+    }
+
+    private fun showSearchToolbar() {
+        fragmentManager?.let {
+            SearchUserDialogFragment.newInstance(this)
+                .show(it, "fragment_search_user")
+        }
     }
 }
