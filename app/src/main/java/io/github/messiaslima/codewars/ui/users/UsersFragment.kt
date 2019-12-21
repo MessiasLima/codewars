@@ -1,30 +1,62 @@
 package io.github.messiaslima.codewars.ui.users
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import io.github.messiaslima.codewars.R
 import io.github.messiaslima.codewars.databinding.FragmentUsersBinding
-import io.github.messiaslima.codewars.ui.shared.BaseFragment
-import kotlinx.android.synthetic.main.fragment_search_user.*
+import io.github.messiaslima.codewars.ui.shared.LoadingDialogFragment
 import kotlinx.android.synthetic.main.fragment_users.*
+import javax.inject.Inject
 
-class UsersFragment : BaseFragment(), SearchUserDialogFragment.OnSearchUserListener {
+class UsersFragment : Fragment() {
+
+    @Inject
+    lateinit var userViewModelFactory: UsersViewModel.Factory
+
+    lateinit var viewModel: UsersViewModel
+    private var loadingDialogFragment: LoadingDialogFragment? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        DaggerUsersComponent.create().inject(this)
+
+        viewModel = ViewModelProviders.of(this, userViewModelFactory)[UsersViewModel::class.java]
+
         val fragmentUsersBinding = FragmentUsersBinding.inflate(inflater, container, false)
-        fragmentUsersBinding.viewModel = UsersViewModel()
+        fragmentUsersBinding.lifecycleOwner = this
+        fragmentUsersBinding.viewModel = viewModel
+
         return fragmentUsersBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupMenuListener()
+        setupLoadingListener()
+    }
+
+    private fun setupLoadingListener() {
+        viewModel.isLoading.observe(this, Observer { isLoading ->
+
+            if (loadingDialogFragment == null) {
+                loadingDialogFragment = LoadingDialogFragment()
+            }
+
+            if (isLoading) {
+                loadingDialogFragment?.show(fragmentManager!!, LoadingDialogFragment.TAG)
+            } else {
+                loadingDialogFragment?.dismiss()
+            }
+
+        })
     }
 
     private fun setupMenuListener() {
@@ -39,14 +71,10 @@ class UsersFragment : BaseFragment(), SearchUserDialogFragment.OnSearchUserListe
         }
     }
 
-    override fun onSearchUser(username: String) {
-
-    }
-
     private fun showSearchToolbar() {
         fragmentManager?.let {
-            SearchUserDialogFragment.newInstance(this)
-                .show(it, "fragment_search_user")
+            SearchUserDialogFragment.newInstance(viewModel)
+                .show(it, "dialog_fragment_search_user")
         }
     }
 }

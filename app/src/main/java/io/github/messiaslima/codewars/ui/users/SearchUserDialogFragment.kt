@@ -6,17 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import io.github.messiaslima.codewars.R
-import kotlinx.android.synthetic.main.fragment_search_user.*
+import kotlinx.android.synthetic.main.dialog_fragment_search_user.*
 
 class SearchUserDialogFragment : DialogFragment() {
 
     lateinit var onSearchUserListener: OnSearchUserListener
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_search_user, container, false)
+        return inflater.inflate(R.layout.dialog_fragment_search_user, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -1,0 +1,3 @@
+package io.github.messiaslima.codewars.repository.challenge
+
+interface ChallengeRepository
