@@ -1,12 +1,14 @@
 package io.github.messiaslima.codewars.ui.users
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import io.github.messiaslima.codewars.R
 import io.github.messiaslima.codewars.databinding.FragmentUsersBinding
 import io.github.messiaslima.codewars.ui.shared.BaseFragment
+import kotlinx.android.synthetic.main.fragment_search_user.*
 import kotlinx.android.synthetic.main.fragment_users.*
 
 class UsersFragment : BaseFragment(), SearchUserDialogFragment.OnSearchUserListener {
@@ -38,6 +40,7 @@ class UsersFragment : BaseFragment(), SearchUserDialogFragment.OnSearchUserListe
     }
 
     override fun onSearchUser(username: String) {
+
     }
 
     private fun showSearchToolbar() {
