@@ -12,20 +12,21 @@ import io.github.messiaslima.codewars.databinding.FragmentUsersBinding
 import io.github.messiaslima.codewars.entity.User
 import io.github.messiaslima.codewars.ui.shared.LoadingDialogFragment
 import io.github.messiaslima.codewars.ui.shared.navigateTo
+import io.github.messiaslima.codewars.ui.shared.showErrorMessage
 import io.github.messiaslima.codewars.ui.user.UserFragment
 import kotlinx.android.synthetic.main.fragment_users.*
 
 class UsersFragment : Fragment(), UsersContract.View {
 
     lateinit var viewModel: UsersViewModel
-    private var loadingDialogFragment: LoadingDialogFragment? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        viewModel = ViewModelProviders.of(this, UsersViewModel.Factory(this))[UsersViewModel::class.java]
+        viewModel =
+            ViewModelProviders.of(this, UsersViewModel.Factory(this))[UsersViewModel::class.java]
 
         val fragmentUsersBinding = FragmentUsersBinding.inflate(inflater, container, false)
         fragmentUsersBinding.lifecycleOwner = this
@@ -37,33 +38,9 @@ class UsersFragment : Fragment(), UsersContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupMenuListener()
-        setupLoadingListener()
-        setupUserFoundListener()
     }
 
-    private fun setupUserFoundListener() {
-        viewModel.userFound.observe(this, Observer { userEvent ->
-            userEvent.getContentIfNotHandled()?.let(this::goToDetails)
-        })
-    }
-
-    private fun setupLoadingListener() {
-        viewModel.isLoading.observe(this, Observer { isLoading ->
-
-            if (loadingDialogFragment == null) {
-                loadingDialogFragment = LoadingDialogFragment()
-            }
-
-            if (isLoading) {
-                loadingDialogFragment?.show(fragmentManager!!, LoadingDialogFragment.TAG)
-            } else {
-                loadingDialogFragment?.dismiss()
-            }
-
-        })
-    }
-
-    private fun goToDetails(user: User) {
+    override fun navigateToDetails(user: User) {
         navigateTo(UserFragment.newInstance(user))
     }
 
@@ -84,5 +61,9 @@ class UsersFragment : Fragment(), UsersContract.View {
             SearchUserDialogFragment.newInstance(viewModel)
                 .show(it, "dialog_fragment_search_user")
         }
+    }
+
+    override fun handleError(message: String, throwable: Throwable?) {
+        showErrorMessage(message, throwable)
     }
 }

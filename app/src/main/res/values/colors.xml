@@ -3,4 +3,5 @@
     <color name="colorPrimary">#3F3F3F</color>
     <color name="colorPrimaryDark">#303030</color>
     <color name="colorAccent">#fff</color>
+    <color name="loading_background">#A4000000</color>
 </resources>

@@ -5,6 +5,10 @@ import io.github.messiaslima.codewars.entity.User
 import io.github.messiaslima.codewars.repository.shared.CodewarsResult
 import io.github.messiaslima.codewars.repository.user.UserRepository
 import io.github.messiaslima.codewars.ui.shared.Event
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class UsersViewModel constructor(
@@ -13,22 +17,15 @@ class UsersViewModel constructor(
 
     @Inject
     lateinit var userRepository: UserRepository
-
-    private val _isLoading = MutableLiveData<Boolean>()
-    val isLoading: LiveData<Boolean> = _isLoading
-
-    private val _username = MutableLiveData<String>()
-
-    val userFound: LiveData<Event<User?>> =
-        Transformations.switchMap(_username, this::searchUserByUsename)
+    private val compositeDisposable = CompositeDisposable()
+    var isLoading = MutableLiveData<Boolean>()
 
     init {
         DaggerUsersComponent.create().inject(this)
     }
 
     override fun onSearchUser(username: String) {
-        _isLoading.value = true
-        _username.value = username
+        searchUserByUsename(username)
     }
 
     class Factory constructor(
@@ -41,21 +38,24 @@ class UsersViewModel constructor(
         }
     }
 
-    private fun searchUserByUsename(username: String): LiveData<Event<User?>> {
-        val userResultLiveData = userRepository.searchUser(username)
-        val userLiveData = transformResultToUserLiveData(userResultLiveData)
-        return Transformations.map(userLiveData) { return@map Event(it) }
+    private fun searchUserByUsename(username: String) {
+        isLoading.value = true
+        userRepository.searchUser(username)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .doFinally {
+                isLoading.value = false
+            }
+            .subscribe({ user ->
+                view.navigateToDetails(user)
+            }, {
+                view.handleError("Ops! Something was wrong getting the user", it)
+            }).addTo(compositeDisposable)
     }
 
-    private fun transformResultToUserLiveData(userResultLiveData: LiveData<CodewarsResult<User>>): LiveData<User?> {
-        return Transformations.map(userResultLiveData) {
-            _isLoading.value = false
-            if (it is CodewarsResult.Success) {
-                return@map it.value
-            } else {
-                return@map null
-            }
-        }
+    override fun onCleared() {
+        super.onCleared()
+        compositeDisposable.clear()
     }
 }
 

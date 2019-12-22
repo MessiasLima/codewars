@@ -3,6 +3,7 @@ package io.github.messiaslima.codewars.repository.shared
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 
@@ -15,6 +16,7 @@ class CodewarsServiceModule {
         val retrofit = Retrofit.Builder()
             .baseUrl("https://www.codewars.com/api/v1/")
             .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
 
         return retrofit.create<CodewarsService>(CodewarsService::class.java)
