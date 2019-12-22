@@ -14,12 +14,8 @@ import io.github.messiaslima.codewars.ui.shared.LoadingDialogFragment
 import io.github.messiaslima.codewars.ui.shared.navigateTo
 import io.github.messiaslima.codewars.ui.user.UserFragment
 import kotlinx.android.synthetic.main.fragment_users.*
-import javax.inject.Inject
 
-class UsersFragment : Fragment() {
-
-    @Inject
-    lateinit var userViewModelFactory: UsersViewModel.Factory
+class UsersFragment : Fragment(), UsersContract.View {
 
     lateinit var viewModel: UsersViewModel
     private var loadingDialogFragment: LoadingDialogFragment? = null
@@ -29,9 +25,7 @@ class UsersFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        DaggerUsersComponent.create().inject(this)
-
-        viewModel = ViewModelProviders.of(this, userViewModelFactory)[UsersViewModel::class.java]
+        viewModel = ViewModelProviders.of(this, UsersViewModel.Factory(this))[UsersViewModel::class.java]
 
         val fragmentUsersBinding = FragmentUsersBinding.inflate(inflater, container, false)
         fragmentUsersBinding.lifecycleOwner = this
@@ -48,8 +42,8 @@ class UsersFragment : Fragment() {
     }
 
     private fun setupUserFoundListener() {
-        viewModel.userFound.observe(this, Observer { user ->
-            user?.let(this::goToDetails)
+        viewModel.userFound.observe(this, Observer { userEvent ->
+            userEvent.getContentIfNotHandled()?.let(this::goToDetails)
         })
     }
 
