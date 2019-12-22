@@ -9,7 +9,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.github.messiaslima.codewars.R
 import io.github.messiaslima.codewars.databinding.FragmentUsersBinding
+import io.github.messiaslima.codewars.entity.User
 import io.github.messiaslima.codewars.ui.shared.LoadingDialogFragment
+import io.github.messiaslima.codewars.ui.shared.navigateTo
+import io.github.messiaslima.codewars.ui.user.UserFragment
 import kotlinx.android.synthetic.main.fragment_users.*
 import javax.inject.Inject
 
@@ -41,6 +44,13 @@ class UsersFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupMenuListener()
         setupLoadingListener()
+        setupUserFoundListener()
+    }
+
+    private fun setupUserFoundListener() {
+        viewModel.userFound.observe(this, Observer { user ->
+            user?.let(this::goToDetails)
+        })
     }
 
     private fun setupLoadingListener() {
@@ -57,6 +67,10 @@ class UsersFragment : Fragment() {
             }
 
         })
+    }
+
+    private fun goToDetails(user: User) {
+        navigateTo(UserFragment.newInstance(user))
     }
 
     private fun setupMenuListener() {
