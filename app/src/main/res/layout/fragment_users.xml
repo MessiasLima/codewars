@@ -32,7 +32,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_scrollFlags="scroll|enterAlways|snap"
                 app:menu="@menu/menu_users"
-                app:subtitle="@{ viewModel.helloWorld }"
                 app:title="@string/app_name" />
 
         </com.google.android.material.appbar.AppBarLayout>

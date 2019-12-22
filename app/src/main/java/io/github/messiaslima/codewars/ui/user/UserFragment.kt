@@ -5,19 +5,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import io.github.messiaslima.codewars.R
+import androidx.lifecycle.ViewModelProviders
+import io.github.messiaslima.codewars.databinding.FragmentUserBinding
 import io.github.messiaslima.codewars.entity.User
 
-class UserFragment : Fragment() {
+class UserFragment : Fragment(), UserContract.View {
 
     lateinit var user: User
+    lateinit var viewModel: UserViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_user, container, false)
+        val viewModelFactory = UserViewModel.Factory(this, user)
+        viewModel = ViewModelProviders.of(this, viewModelFactory)[UserViewModel::class.java]
+        val binding = FragmentUserBinding.inflate(inflater, container, false)
+        binding.viewModel = viewModel
+        return binding.root
     }
 
     companion object {
