@@ -18,4 +18,7 @@ interface CodewarsService {
         @Query("page") page: Int
     ): Single<ChallengesAPIResponse>
 
+    @GET("users/{username}/code-challenges/authored")
+    fun findAuthoredChallenges(@Path("username") username: String): Single<ChallengesAPIResponse>
+
 }

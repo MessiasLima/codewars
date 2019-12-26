@@ -53,7 +53,10 @@ class ChallengesAdapter(
             date.text = getFormattedDate(challenge.completedAt)
         }
 
-        private fun getFormattedDate(completedAt: Date): String {
+        private fun getFormattedDate(completedAt: Date?): String {
+
+            if (completedAt == null) return ""
+
             try {
                 val simpleDateFormat = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
                 return simpleDateFormat.format(completedAt)

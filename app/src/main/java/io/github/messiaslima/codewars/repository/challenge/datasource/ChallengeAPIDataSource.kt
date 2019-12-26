@@ -12,7 +12,7 @@ class ChallengeAPIDataSource @Inject constructor(
         return codewarsService.findCompletedChallenges(user.username, page)
     }
 
-    fun findAuthoredChallenges(user: User, page: Int): Single<ChallengesAPIResponse> {
-        return codewarsService.findCompletedChallenges(user.username, page)
+    fun findAuthoredChallenges(user: User): Single<ChallengesAPIResponse> {
+        return codewarsService.findAuthoredChallenges(user.username)
     }
 }

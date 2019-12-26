@@ -16,7 +16,7 @@ class ChallengeRepositoryImpl @Inject constructor(
 
         val responseSingle = when(challengeType){
             ChallengeType.COMPLETED -> challengeAPIDataSource.findCompletedChallenges(user, page)
-            ChallengeType.AUTHORED -> challengeAPIDataSource.findAuthoredChallenges(user, page)
+            ChallengeType.AUTHORED -> challengeAPIDataSource.findAuthoredChallenges(user)
         }
 
         return handleResponse(responseSingle)

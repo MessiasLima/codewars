@@ -6,7 +6,7 @@ import java.io.Serializable
 data class Ranks(
 
     @Embedded
-    val overall: Overall? = null,
+    val overall: Rank? = null,
 
-    val languages: Map<String, Overall>? = null
+    val languages: Map<String, Rank>? = null
 ): Serializable
