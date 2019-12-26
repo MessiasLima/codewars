@@ -1,6 +1,7 @@
 package io.github.messiaslima.codewars.ui.user
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import io.github.messiaslima.codewars.databinding.FragmentUserBinding
 import io.github.messiaslima.codewars.entity.User
+import kotlinx.android.synthetic.main.fragment_user.*
 
 class UserFragment : Fragment(), UserContract.View {
 
@@ -19,11 +21,27 @@ class UserFragment : Fragment(), UserContract.View {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val viewModelFactory = UserViewModel.Factory(this, user)
-        viewModel = ViewModelProviders.of(this, viewModelFactory)[UserViewModel::class.java]
+
+        viewModel = ViewModelProviders.of(
+            this,
+            UserViewModel.Factory(this, user)
+        )[UserViewModel::class.java]
+
         val binding = FragmentUserBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
+
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupMenuListener()
+    }
+
+    private fun setupMenuListener() {
+        userToolbar.setNavigationOnClickListener {
+            fragmentManager?.popBackStack()
+        }
     }
 
     companion object {

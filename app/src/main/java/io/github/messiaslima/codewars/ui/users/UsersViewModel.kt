@@ -59,6 +59,7 @@ class UsersViewModel constructor(
             }
             .subscribe({ user ->
                 view.navigateToDetails(user)
+                findSavedUsers()
             }, {
                 view.handleError("Ops! Something was wrong getting the user", it)
             }).addTo(compositeDisposable)
