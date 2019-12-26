@@ -14,6 +14,7 @@
         android:orientation="vertical">
 
         <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/userAppBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent">
@@ -24,8 +25,26 @@
                 android:layout_height="wrap_content"
                 app:navigationIcon="@drawable/ic_back"
                 app:subtitle="@{viewModel.user.username}"
-                app:title="@{viewModel.user.name}" />
+                app:subtitleTextColor="@color/colorAccentTranslucid"
+                app:title="@{viewModel.user.name}"
+                app:titleTextColor="@color/colorAccent" />
         </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/challengesPager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/userBottomNavigation"
+            app:layout_constraintTop_toBottomOf="@id/userAppBar" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/userBottomNavigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:menu="@menu/menu_challenges_bottom_navigation" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -6,4 +6,6 @@
     <string name="search">Search</string>
     <string name="user_search_field_placeholder">ID or username</string>
     <string name="user_search">User search</string>
+    <string name="completed_challenges">Completed challenges</string>
+    <string name="authored_challenges">Authored challenges</string>
 </resources>
