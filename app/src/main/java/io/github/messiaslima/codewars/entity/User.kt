@@ -4,6 +4,7 @@ import androidx.annotation.NonNull
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 
 @Entity
 data class User(
@@ -27,4 +28,4 @@ data class User(
 
     @Embedded
     val codeChallenges: CodeChallenges? = null
-)
+): Serializable

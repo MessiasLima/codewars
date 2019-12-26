@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager2.widget.ViewPager2
@@ -14,14 +15,16 @@ import kotlinx.android.synthetic.main.fragment_user.*
 
 class UserFragment : Fragment(), UserContract.View {
 
-    lateinit var user: User
     lateinit var viewModel: UserViewModel
+    lateinit var user: User
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        user = arguments?.getSerializable("user") as User
 
         viewModel = ViewModelProviders.of(
             this,
@@ -77,9 +80,14 @@ class UserFragment : Fragment(), UserContract.View {
 
     companion object {
         fun newInstance(user: User): UserFragment {
-            return UserFragment().apply {
-                this.user = user
-            }
+
+            val bundle = bundleOf(
+                Pair("user", user)
+            )
+
+            val fragment = UserFragment()
+            fragment.arguments = bundle
+            return fragment
         }
     }
 }

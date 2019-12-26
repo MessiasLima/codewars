@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import io.github.messiaslima.codewars.R
 import io.github.messiaslima.codewars.databinding.FragmentChallengesBinding
 import io.github.messiaslima.codewars.entity.Challenge
@@ -29,6 +31,9 @@ class ChallengesFragment : Fragment(), ChallengesContract.View {
         savedInstanceState: Bundle?
     ): View? {
 
+        user = arguments?.get("user") as User
+        challengeType = arguments?.get("challengeType") as ChallengeType
+
         viewModel = ViewModelProviders.of(
             this,
             ChallengesViewModel.Factory(user, challengeType, this)
@@ -44,6 +49,35 @@ class ChallengesFragment : Fragment(), ChallengesContract.View {
         super.onViewCreated(view, savedInstanceState)
         setupChallengesRecyclerView()
         setupLoadingListener()
+        setupScrollListener()
+    }
+
+    private fun setupScrollListener() {
+        challengesRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val layoutManager = challengesRecyclerView.layoutManager as LinearLayoutManager
+                if (shouldGetNextPage(layoutManager)) {
+                    viewModel.getNextPage()
+                }
+            }
+
+            private fun shouldGetNextPage(layoutManager: LinearLayoutManager): Boolean{
+                return isNotLoading() &&
+                        theLastItemIsVisible(layoutManager) &&
+                        !viewModel.itReachedTheEndOfList()
+            }
+
+            private fun theLastItemIsVisible(layoutManager: LinearLayoutManager) =
+                layoutManager.findLastVisibleItemPosition() == (challengesRecyclerView.adapter?.itemCount
+                    ?: 0) - 1
+
+            private fun isNotLoading(): Boolean {
+                return viewModel.isLoading.value == false
+            }
+
+
+        })
     }
 
     private fun setupLoadingListener() {
@@ -74,9 +108,14 @@ class ChallengesFragment : Fragment(), ChallengesContract.View {
 
     companion object {
         fun getInstance(user: User, challengeType: ChallengeType): ChallengesFragment {
+
+            val bundle = bundleOf(
+                Pair("user", user),
+                Pair("challengeType", challengeType)
+            )
+
             val fragment = ChallengesFragment()
-            fragment.challengeType = challengeType
-            fragment.user = user
+            fragment.arguments = bundle
             return fragment
         }
     }

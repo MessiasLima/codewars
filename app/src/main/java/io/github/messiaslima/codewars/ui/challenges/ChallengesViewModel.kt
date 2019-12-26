@@ -29,14 +29,18 @@ class ChallengesViewModel(
     private val _challenges = MutableLiveData<List<Challenge>>()
     val challenges: LiveData<List<Challenge>> = _challenges
 
+    private var page = 0
+    private var firstPageSize: Int? = null
+    private var currentPageSize: Int? = null
+
     init {
         DaggerChallengeComponent.create().inject(this)
-        searchChallenges()
+        searchChallenges(page)
     }
 
-    private fun searchChallenges() {
+    private fun searchChallenges(page: Int) {
         _isLoading.value = true
-        challengeRepository.findChallenges(user, challengeType)
+        challengeRepository.findChallenges(user, challengeType, page)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .doFinally {
@@ -44,15 +48,30 @@ class ChallengesViewModel(
             }
             .subscribe({ challenges ->
                 _challenges.value = challenges
+                updatePaginationVariables(challenges.size)
             }, { throwable ->
                 view.handleError(throwable)
             })
             .addTo(compositeDisposable)
     }
 
+    private fun updatePaginationVariables(size: Int) {
+        page++
+        if (firstPageSize == null) {
+            firstPageSize = size
+        }
+        currentPageSize = size
+    }
+
+    fun itReachedTheEndOfList() = (firstPageSize ?: 0) > (currentPageSize ?: 0)
+
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.clear()
+    }
+
+    fun getNextPage() {
+        searchChallenges(page)
     }
 
     class Factory(
