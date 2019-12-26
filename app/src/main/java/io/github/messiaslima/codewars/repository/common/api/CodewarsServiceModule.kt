@@ -1,4 +1,4 @@
-package io.github.messiaslima.codewars.repository.shared
+package io.github.messiaslima.codewars.repository.common.api
 
 import dagger.Module
 import dagger.Provides
@@ -19,6 +19,8 @@ class CodewarsServiceModule {
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
 
-        return retrofit.create<CodewarsService>(CodewarsService::class.java)
+        return retrofit.create<CodewarsService>(
+            CodewarsService::class.java
+        )
     }
 }

@@ -5,4 +5,10 @@ enum class Color(val value: String) {
     PURPLE("purple"),
     WHITE("white"),
     YELLOW("yellow");
+
+    companion object {
+        fun findByValue(value: String): Color? {
+            return values().find { it.value == value }
+        }
+    }
 }

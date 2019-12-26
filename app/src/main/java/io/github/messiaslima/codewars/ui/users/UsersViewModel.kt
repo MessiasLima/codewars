@@ -1,10 +1,9 @@
 package io.github.messiaslima.codewars.ui.users
 
-import androidx.lifecycle.*
-import io.github.messiaslima.codewars.entity.User
-import io.github.messiaslima.codewars.repository.shared.CodewarsResult
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import io.github.messiaslima.codewars.repository.user.UserRepository
-import io.github.messiaslima.codewars.ui.shared.Event
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -28,16 +27,6 @@ class UsersViewModel constructor(
         searchUserByUsename(username)
     }
 
-    class Factory constructor(
-        private val view: UsersContract.View
-    ) : ViewModelProvider.Factory {
-
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return UsersViewModel(view) as T
-        }
-    }
-
     private fun searchUserByUsename(username: String) {
         isLoading.value = true
         userRepository.searchUser(username)
@@ -56,6 +45,16 @@ class UsersViewModel constructor(
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.clear()
+    }
+
+    class Factory constructor(
+        private val view: UsersContract.View
+    ) : ViewModelProvider.Factory {
+
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            return UsersViewModel(view) as T
+        }
     }
 }
 
