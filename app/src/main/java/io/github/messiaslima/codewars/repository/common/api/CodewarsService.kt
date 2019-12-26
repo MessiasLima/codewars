@@ -1,4 +1,4 @@
-package io.github.messiaslima.codewars.repository.shared
+package io.github.messiaslima.codewars.repository.common.api
 
 import io.github.messiaslima.codewars.entity.User
 import io.reactivex.Single

@@ -1,7 +1,7 @@
 package io.github.messiaslima.codewars.repository.user.datasource
 
 import io.github.messiaslima.codewars.entity.User
-import io.github.messiaslima.codewars.repository.shared.CodewarsService
+import io.github.messiaslima.codewars.repository.common.api.CodewarsService
 import io.reactivex.Single
 import javax.inject.Inject
 
