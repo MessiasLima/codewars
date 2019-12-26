@@ -43,6 +43,13 @@ class ChallengesFragment : Fragment(), ChallengesContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupChallengesRecyclerView()
+        setupLoadingListener()
+    }
+
+    private fun setupLoadingListener() {
+        viewModel.isLoading.observe(this, Observer {
+            progressBar.visibility = if (it) View.VISIBLE else View.GONE
+        })
     }
 
     private fun setupChallengesRecyclerView() {

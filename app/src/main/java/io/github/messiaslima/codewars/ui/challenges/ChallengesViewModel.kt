@@ -23,7 +23,8 @@ class ChallengesViewModel(
     lateinit var challengeRepository: ChallengeRepository
     private val compositeDisposable = CompositeDisposable()
 
-    var loading = MutableLiveData<Boolean>()
+    private val _isLoading= MutableLiveData<Boolean>()
+    val isLoading : LiveData<Boolean> = _isLoading
 
     private val _challenges = MutableLiveData<List<Challenge>>()
     val challenges: LiveData<List<Challenge>> = _challenges
@@ -34,12 +35,12 @@ class ChallengesViewModel(
     }
 
     private fun searchChallenges() {
-        loading.value = true
+        _isLoading.value = true
         challengeRepository.findChallenges(user, challengeType)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .doFinally {
-                loading.value = false
+                _isLoading.value = false
             }
             .subscribe({ challenges ->
                 _challenges.value = challenges
