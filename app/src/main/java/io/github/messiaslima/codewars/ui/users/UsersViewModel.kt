@@ -1,8 +1,10 @@
 package io.github.messiaslima.codewars.ui.users
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import io.github.messiaslima.codewars.entity.User
 import io.github.messiaslima.codewars.repository.user.UserRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -17,10 +19,30 @@ class UsersViewModel constructor(
     @Inject
     lateinit var userRepository: UserRepository
     private val compositeDisposable = CompositeDisposable()
+
     var isLoading = MutableLiveData<Boolean>()
+
+    private val _savedUsers = MutableLiveData<List<User>>()
+    val savedUsers: LiveData<List<User>> = _savedUsers
 
     init {
         DaggerUsersComponent.create().inject(this)
+        findSavedUsers()
+    }
+
+    private fun findSavedUsers() {
+        isLoading.value = true
+        userRepository.findSavedUsers()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .doFinally{
+                isLoading.value = false
+            }.subscribe({ users ->
+                _savedUsers.value = users
+            },{ throwable ->
+                view.handleError("Error getting saved users", throwable)
+            }).addTo(compositeDisposable)
+
     }
 
     override fun onSearchUser(username: String) {

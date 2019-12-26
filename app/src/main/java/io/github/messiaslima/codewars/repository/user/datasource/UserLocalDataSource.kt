@@ -13,6 +13,6 @@ interface UserLocalDataSource {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun save(user: User): Single<Long>
 
-    @Query("SELECT * FROM User")
-    fun findAll(): Single<List<User>>
+    @Query("SELECT * FROM User LIMIT :limit")
+    fun findAll(limit: Int): Single<List<User>>
 }

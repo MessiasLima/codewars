@@ -19,4 +19,8 @@ class UserRepositoryImpl @Inject constructor(
     override fun saveUser(user: User) : Single<User> {
         return userLocalDataSource.save(user).map { return@map user }
     }
+
+    override fun findSavedUsers(limit: Int): Single<List<User>> {
+        return userLocalDataSource.findAll(limit)
+    }
 }
