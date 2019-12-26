@@ -1,17 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
+
     <data>
 
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="io.github.messiaslima.codewars.ui.challenges.ChallengesViewModel" />
     </data>
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/challengeName"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/challengesRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Challenges" />
-    </LinearLayout>
+            android:background="@color/loading_background"
+            android:visibility="@{ viewModel.loading ? View.VISIBLE : View.GONE, default = gone }">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical" />
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

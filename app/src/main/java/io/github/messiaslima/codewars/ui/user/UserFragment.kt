@@ -57,7 +57,7 @@ class UserFragment : Fragment(), UserContract.View {
     }
 
     private fun setupPageAdapter() {
-        challengesPager.adapter = ChallengesPagerAdapter(this)
+        challengesPager.adapter = ChallengesPagerAdapter(this, user)
         challengesPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 if (position == 0) {

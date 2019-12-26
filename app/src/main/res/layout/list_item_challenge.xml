@@ -11,7 +11,7 @@
     android:padding="@dimen/list_item_padding">
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/listItemUserName"
+        android:id="@+id/listItemChallengeName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
@@ -19,10 +19,10 @@
         tools:text="Messias Lima" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/listItemUserUsername"
+        android:id="@+id/listItemChallengeDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/listItemUserName"
+        app:layout_constraintTop_toBottomOf="@id/listItemChallengeName"
         tools:text="Messias Lima" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
