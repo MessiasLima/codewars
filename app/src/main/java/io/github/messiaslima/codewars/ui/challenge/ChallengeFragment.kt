@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import io.github.messiaslima.codewars.databinding.FragmentChallengeBinding
 import io.github.messiaslima.codewars.entity.Challenge
+import kotlinx.android.synthetic.main.fragment_challenge.*
 
 class ChallengeFragment : Fragment() {
 
@@ -32,6 +33,17 @@ class ChallengeFragment : Fragment() {
         binding.lifecycleOwner = this
 
         return binding.root
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        setupBackButton()
+    }
+
+    private fun setupBackButton() {
+        challengeToolbar.setNavigationOnClickListener {
+            fragmentManager?.popBackStack()
+        }
     }
 
     companion object {
