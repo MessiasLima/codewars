@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.pd.chocobar.ChocoBar
 import io.github.messiaslima.codewars.R
 import io.github.messiaslima.codewars.databinding.FragmentChallengesBinding
 import io.github.messiaslima.codewars.entity.Challenge
@@ -60,8 +61,18 @@ class ChallengesFragment : Fragment(), ChallengesContract.View {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 val layoutManager = challengesRecyclerView.layoutManager as LinearLayoutManager
+
                 if (shouldGetNextPage(layoutManager)) {
                     viewModel.getNextPage()
+                }
+
+                if (
+                    isNotLoading() &&
+                    theLastItemIsVisible(layoutManager) &&
+                    viewModel.itReachedTheEndOfList() &&
+                    !viewModel.endOfListMessageShown
+                ){
+                    showEndOfResultsMessage()
                 }
             }
 
@@ -107,6 +118,18 @@ class ChallengesFragment : Fragment(), ChallengesContract.View {
 
     override fun handleError(throwable: Throwable?) {
         showErrorMessage(getString(R.string.error_getting_completed_challenges), throwable)
+    }
+
+    override fun showEndOfResultsMessage() {
+
+        ChocoBar.builder()
+            .setView(view)
+            .setText(R.string.end_of_results_message)
+            .setDuration(ChocoBar.LENGTH_LONG)
+            .orange()
+            .show()
+
+        viewModel.endOfListMessageShown = true
     }
 
     companion object {

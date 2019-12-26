@@ -19,6 +19,7 @@ class ChallengesViewModel(
     private val view: ChallengesContract.View
 ) : ViewModel() {
 
+    var endOfListMessageShown: Boolean = false
     @Inject
     lateinit var challengeRepository: ChallengeRepository
     private val compositeDisposable = CompositeDisposable()
