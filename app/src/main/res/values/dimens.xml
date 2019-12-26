@@ -3,4 +3,5 @@
     <dimen name="dialog_default_vertical_padding">16dp</dimen>
     <dimen name="dialog_default_horizontal_padding">20dp</dimen>
     <dimen name="list_item_padding">16dp</dimen>
+    <dimen name="screen_horizontal_padding">20dp</dimen>
 </resources>

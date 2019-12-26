@@ -26,4 +26,7 @@ class ChallengeRepositoryImpl @Inject constructor(
         return responseSingle.map { it.data }
     }
 
+    override fun findChallenge(id: String?): Single<Challenge> {
+        return challengeAPIDataSource.findChallenge(id)
+    }
 }

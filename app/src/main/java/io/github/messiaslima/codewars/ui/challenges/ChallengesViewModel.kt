@@ -34,7 +34,7 @@ class ChallengesViewModel(
     private var currentPageSize: Int? = null
 
     init {
-        DaggerChallengeComponent.create().inject(this)
+        DaggerChallengesComponent.create().inject(this)
         searchChallenges(page)
     }
 

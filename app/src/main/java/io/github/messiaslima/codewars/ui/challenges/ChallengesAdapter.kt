@@ -50,16 +50,16 @@ class ChallengesAdapter(
 
         fun bind(challenge: Challenge) {
             challengeName.text = challenge.name
-            date.text = getFormattedDate(challenge.completedAt)
+            date.text = getFormattedDate(challenge.completedAt ?: challenge.publishedAt)
         }
 
-        private fun getFormattedDate(completedAt: Date?): String {
+        private fun getFormattedDate(date: Date?): String {
 
-            if (completedAt == null) return ""
+            if (date == null) return ""
 
             try {
                 val simpleDateFormat = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
-                return simpleDateFormat.format(completedAt)
+                return simpleDateFormat.format(date)
             } catch (ex: ParseException) {
                 return ""
             }

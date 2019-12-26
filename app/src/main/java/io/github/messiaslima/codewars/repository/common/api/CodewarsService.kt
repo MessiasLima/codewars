@@ -1,5 +1,6 @@
 package io.github.messiaslima.codewars.repository.common.api
 
+import io.github.messiaslima.codewars.entity.Challenge
 import io.github.messiaslima.codewars.entity.User
 import io.github.messiaslima.codewars.repository.challenge.datasource.ChallengesAPIResponse
 import io.reactivex.Single
@@ -20,5 +21,8 @@ interface CodewarsService {
 
     @GET("users/{username}/code-challenges/authored")
     fun findAuthoredChallenges(@Path("username") username: String): Single<ChallengesAPIResponse>
+
+    @GET("code-challenges/{id}")
+    fun findChallenge(@Path("id") id: String?): Single<Challenge>
 
 }

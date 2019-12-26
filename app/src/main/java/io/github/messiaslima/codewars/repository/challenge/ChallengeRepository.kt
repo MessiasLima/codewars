@@ -7,4 +7,5 @@ import io.reactivex.Single
 
 interface ChallengeRepository {
     fun findChallenges(user: User, challengeType: ChallengeType, page: Int = 0): Single<List<Challenge>>
+    fun findChallenge(id: String?): Single<Challenge>
 }

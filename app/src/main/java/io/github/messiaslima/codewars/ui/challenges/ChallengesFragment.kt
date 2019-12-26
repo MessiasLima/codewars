@@ -16,6 +16,8 @@ import io.github.messiaslima.codewars.R
 import io.github.messiaslima.codewars.databinding.FragmentChallengesBinding
 import io.github.messiaslima.codewars.entity.Challenge
 import io.github.messiaslima.codewars.entity.User
+import io.github.messiaslima.codewars.ui.challenge.ChallengeFragment
+import io.github.messiaslima.codewars.ui.shared.navigateTo
 import io.github.messiaslima.codewars.ui.shared.showErrorMessage
 import kotlinx.android.synthetic.main.fragment_challenges.*
 
@@ -41,6 +43,7 @@ class ChallengesFragment : Fragment(), ChallengesContract.View {
 
         val binding = FragmentChallengesBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
+        binding.lifecycleOwner = this
 
         return binding.root
     }
@@ -99,7 +102,7 @@ class ChallengesFragment : Fragment(), ChallengesContract.View {
     }
 
     private fun showChallengeDetails(challenge: Challenge){
-
+        navigateTo(ChallengeFragment.getInstance(challenge))
     }
 
     override fun handleError(throwable: Throwable?) {

@@ -4,6 +4,6 @@ import dagger.Component
 import io.github.messiaslima.codewars.repository.challenge.ChallengeRepsitoryModule
 
 @Component(modules = [ChallengeRepsitoryModule::class])
-interface ChallengeComponent {
+interface ChallengesComponent {
     fun inject(challengesViewModel: ChallengesViewModel)
 }

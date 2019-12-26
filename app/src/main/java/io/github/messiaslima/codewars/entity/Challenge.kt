@@ -1,8 +1,9 @@
 package io.github.messiaslima.codewars.entity
 
+import java.io.Serializable
 import java.util.*
 
-open class Challenge (
+data class Challenge (
     var id: String? = null,
     var name: String? = null,
     var slug: String? = null,
@@ -22,4 +23,4 @@ open class Challenge (
     var voteScore: Long? = null,
     var tags: List<String>? = null,
     var contributorsWanted: Boolean? = null
-)
+): Serializable
