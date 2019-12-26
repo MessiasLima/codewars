@@ -15,8 +15,13 @@ fun Fragment.showErrorMessage(message: String, throwable: Throwable?) {
     if (throwable is HttpException){
         errorMessage = when(throwable.code()){
             404 -> "We cannot find the requested user"
-            else -> message
+            else -> {
+                throwable.printStackTrace()
+                message
+            }
         }
+    } else {
+        throwable?.printStackTrace()
     }
 
     ChocoBar.builder()

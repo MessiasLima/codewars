@@ -5,4 +5,5 @@ import io.reactivex.Single
 
 interface UserRepository {
     fun searchUser(username: String): Single<User>
+    fun saveUser(user: User): Single<User>
 }
