@@ -3,7 +3,7 @@ package io.github.messiaslima.codewars.ui.users
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import io.github.messiaslima.codewars.Event
 import io.github.messiaslima.codewars.entity.User
 import io.github.messiaslima.codewars.repository.user.UserRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -12,9 +12,7 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class UsersViewModel constructor(
-    private val view: UsersContract.View
-) : ViewModel(), SearchUserDialogFragment.OnSearchUserListener {
+class UsersViewModel : ViewModel(), SearchUserDialogFragment.OnSearchUserListener {
 
     @Inject
     lateinit var userRepository: UserRepository
@@ -24,6 +22,12 @@ class UsersViewModel constructor(
 
     private val _savedUsers = MutableLiveData<List<User>>()
     val savedUsers: LiveData<List<User>> = _savedUsers
+
+    private val _errorEvent = MutableLiveData<Event<Throwable>>()
+    val errorEvent: LiveData<Event<Throwable>> = _errorEvent
+
+    private val _goToDetailsEvent = MutableLiveData<Event<User>>()
+    val goToDetailsEvent: LiveData<Event<User>> = _goToDetailsEvent
 
     init {
         DaggerUsersComponent.create().inject(this)
@@ -40,7 +44,7 @@ class UsersViewModel constructor(
             }.subscribe({ users ->
                 _savedUsers.value = users
             },{ throwable ->
-                view.handleError("Error getting saved users", throwable)
+                _errorEvent.value = Event(throwable)
             }).addTo(compositeDisposable)
 
     }
@@ -58,26 +62,16 @@ class UsersViewModel constructor(
                 isLoading.value = false
             }
             .subscribe({ user ->
-                view.navigateToDetails(user)
+                _goToDetailsEvent.value = Event(user)
                 findSavedUsers()
             }, {
-                view.handleError("Ops! Something was wrong getting the user", it)
+                _errorEvent.value = Event(it)
             }).addTo(compositeDisposable)
     }
 
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.clear()
-    }
-
-    class Factory constructor(
-        private val view: UsersContract.View
-    ) : ViewModelProvider.Factory {
-
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return UsersViewModel(view) as T
-        }
     }
 }
 

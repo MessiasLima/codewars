@@ -5,35 +5,31 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import io.github.messiaslima.codewars.EventObserver
 import io.github.messiaslima.codewars.R
 import io.github.messiaslima.codewars.databinding.FragmentUsersBinding
 import io.github.messiaslima.codewars.entity.User
-import io.github.messiaslima.codewars.ui.shared.LoadingDialogFragment
 import io.github.messiaslima.codewars.ui.shared.navigateTo
 import io.github.messiaslima.codewars.ui.shared.showErrorMessage
 import io.github.messiaslima.codewars.ui.user.UserFragment
-import kotlinx.android.synthetic.main.fragment_users.*
-import kotlinx.android.synthetic.main.list_item_user.*
 
-class UsersFragment : Fragment(), UsersContract.View {
+class UsersFragment : Fragment() {
 
-    lateinit var viewModel: UsersViewModel
+    private lateinit var fragmentUsersBinding: FragmentUsersBinding
+    private val viewModel: UsersViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        viewModel =
-            ViewModelProviders.of(this, UsersViewModel.Factory(this))[UsersViewModel::class.java]
-
-        val fragmentUsersBinding = FragmentUsersBinding.inflate(inflater, container, false)
-        fragmentUsersBinding.lifecycleOwner = this
+        fragmentUsersBinding = FragmentUsersBinding.inflate(inflater, container, false)
+        fragmentUsersBinding.lifecycleOwner = viewLifecycleOwner
         fragmentUsersBinding.viewModel = viewModel
 
         return fragmentUsersBinding.root
@@ -43,6 +39,20 @@ class UsersFragment : Fragment(), UsersContract.View {
         super.onViewCreated(view, savedInstanceState)
         setupMenuListener()
         setupUsersRecyclerView()
+        setupErrorHandler()
+        setupNavigationEvent()
+    }
+
+    private fun setupNavigationEvent() {
+        viewModel.goToDetailsEvent.observe(viewLifecycleOwner, EventObserver {
+            navigateToDetails(it)
+        })
+    }
+
+    private fun setupErrorHandler() {
+        viewModel.errorEvent.observe(viewLifecycleOwner, EventObserver {
+            showErrorMessage("", it)
+        })
     }
 
     private fun setupUsersRecyclerView() {
@@ -50,19 +60,25 @@ class UsersFragment : Fragment(), UsersContract.View {
         val layoutManager = LinearLayoutManager(context)
         val usersAdapter = UsersAdapter(this::navigateToDetails)
 
+        val usersRecyclerView = fragmentUsersBinding.usersRecyclerView
         usersRecyclerView.adapter = usersAdapter
         usersRecyclerView.layoutManager = layoutManager
         usersRecyclerView.itemAnimator = DefaultItemAnimator()
-        usersRecyclerView.addItemDecoration(DividerItemDecoration(context, layoutManager.orientation))
-        viewModel.savedUsers.observe(this, Observer(usersAdapter::updateUsers))
+        usersRecyclerView.addItemDecoration(
+            DividerItemDecoration(
+                context,
+                layoutManager.orientation
+            )
+        )
+        viewModel.savedUsers.observe(viewLifecycleOwner, Observer(usersAdapter::updateUsers))
     }
 
-    override fun navigateToDetails(user: User) {
+    private fun navigateToDetails(user: User) {
         navigateTo(UserFragment.newInstance(user))
     }
 
     private fun setupMenuListener() {
-        usersToolbar.setOnMenuItemClickListener { itemClicked ->
+        fragmentUsersBinding.usersToolbar.setOnMenuItemClickListener { itemClicked ->
 
             if (itemClicked.itemId == R.id.menu_item_users_search) {
                 showSearchToolbar()
@@ -74,13 +90,7 @@ class UsersFragment : Fragment(), UsersContract.View {
     }
 
     private fun showSearchToolbar() {
-        fragmentManager?.let {
-            SearchUserDialogFragment.newInstance(viewModel)
-                .show(it, "dialog_fragment_search_user")
-        }
-    }
-
-    override fun handleError(message: String, throwable: Throwable?) {
-        showErrorMessage(message, throwable)
+        SearchUserDialogFragment.newInstance(viewModel)
+            .show(parentFragmentManager, "dialog_fragment_search_user")
     }
 }
