@@ -70,6 +70,7 @@ class UsersFragment : Fragment() {
                 layoutManager.orientation
             )
         )
+
         viewModel.savedUsers.observe(viewLifecycleOwner, Observer(usersAdapter::updateUsers))
     }
 
