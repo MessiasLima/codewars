@@ -9,7 +9,7 @@ import io.github.messiaslima.codewars.entity.User
 import kotlinx.android.synthetic.main.list_item_user.view.*
 
 class UsersAdapter(
-    private val onItemClickedCallback: ((user: User) -> Unit)? = null
+    private val viewModel: UsersViewModel
 ) : RecyclerView.Adapter<UsersAdapter.UsersViewHolder>() {
 
     private val users =  mutableListOf<User>()
@@ -26,7 +26,7 @@ class UsersAdapter(
         val selectedUser = users[position]
         holder.bindUser(selectedUser)
         holder.itemView.setOnClickListener {
-            onItemClickedCallback?.invoke(selectedUser)
+            viewModel.onUserSelected(selectedUser)
         }
     }
 

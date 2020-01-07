@@ -58,7 +58,7 @@ class UsersFragment : Fragment() {
     private fun setupUsersRecyclerView() {
 
         val layoutManager = LinearLayoutManager(context)
-        val usersAdapter = UsersAdapter(this::navigateToDetails)
+        val usersAdapter = UsersAdapter(viewModel)
 
         val usersRecyclerView = fragmentUsersBinding.usersRecyclerView
         usersRecyclerView.adapter = usersAdapter

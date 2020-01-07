@@ -55,5 +55,9 @@ class UsersViewModel : ViewModel(), SearchUserDialogFragment.OnSearchUserListene
         super.onCleared()
         compositeDisposable.clear()
     }
+
+    fun onUserSelected(selectedUser: User) {
+       _goToDetailsEvent.value = Event(selectedUser)
+    }
 }
 
