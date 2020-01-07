@@ -5,6 +5,7 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.io.Serializable
+import java.util.*
 
 @Entity
 data class User(
@@ -18,6 +19,8 @@ data class User(
     val honor: Long? = null,
 
     val clan: String? = null,
+
+    var creationDate: Date? = null,
 
     val leaderboardPosition: Long? = null,
 

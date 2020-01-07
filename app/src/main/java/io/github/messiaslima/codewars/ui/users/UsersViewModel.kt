@@ -20,8 +20,7 @@ class UsersViewModel : ViewModel(), SearchUserDialogFragment.OnSearchUserListene
 
     var isLoading = MutableLiveData<Boolean>()
 
-    private val _savedUsers = MutableLiveData<List<User>>()
-    val savedUsers: LiveData<List<User>> = _savedUsers
+    val savedUsers: LiveData<List<User>> by lazy { userRepository.findSavedUsers() }
 
     private val _errorEvent = MutableLiveData<Event<Throwable>>()
     val errorEvent: LiveData<Event<Throwable>> = _errorEvent
@@ -31,22 +30,6 @@ class UsersViewModel : ViewModel(), SearchUserDialogFragment.OnSearchUserListene
 
     init {
         DaggerUsersComponent.create().inject(this)
-        findSavedUsers()
-    }
-
-    private fun findSavedUsers() {
-        isLoading.value = true
-        userRepository.findSavedUsers()
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .doFinally{
-                isLoading.value = false
-            }.subscribe({ users ->
-                _savedUsers.value = users
-            },{ throwable ->
-                _errorEvent.value = Event(throwable)
-            }).addTo(compositeDisposable)
-
     }
 
     override fun onSearchUser(username: String) {
@@ -63,7 +46,6 @@ class UsersViewModel : ViewModel(), SearchUserDialogFragment.OnSearchUserListene
             }
             .subscribe({ user ->
                 _goToDetailsEvent.value = Event(user)
-                findSavedUsers()
             }, {
                 _errorEvent.value = Event(it)
             }).addTo(compositeDisposable)
