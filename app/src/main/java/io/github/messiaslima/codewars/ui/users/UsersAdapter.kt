@@ -1,12 +1,10 @@
 package io.github.messiaslima.codewars.ui.users
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import io.github.messiaslima.codewars.R
+import io.github.messiaslima.codewars.databinding.ListItemUserBinding
 import io.github.messiaslima.codewars.entity.User
-import kotlinx.android.synthetic.main.list_item_user.view.*
 
 class UsersAdapter(
     private val viewModel: UsersViewModel
@@ -15,9 +13,7 @@ class UsersAdapter(
     private val users =  mutableListOf<User>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UsersViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.list_item_user, parent, false)
-        return UsersViewHolder(view)
+        return UsersViewHolder.from(parent)
     }
 
     override fun getItemCount() = users.size
@@ -36,16 +32,18 @@ class UsersAdapter(
         notifyDataSetChanged()
     }
 
-    class UsersViewHolder(
-        itemView: View
-    ) : RecyclerView.ViewHolder(itemView) {
-
-        private val name = itemView.listItemUserName
-        private val username = itemView.listItemUserUsername
+    class UsersViewHolder(private val binding: ListItemUserBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bindUser(user: User) {
-            name.text = user.name
-            username.text = user.username
+            binding.user = user
+        }
+
+        companion object {
+            fun from(parent: ViewGroup): UsersViewHolder {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val binding = ListItemUserBinding.inflate(layoutInflater, parent, false)
+                return UsersViewHolder(binding)
+            }
         }
     }
 }

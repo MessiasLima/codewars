@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.github.messiaslima.codewars.Event
+import io.github.messiaslima.codewars.databinding.ListItemUserBinding
 import io.github.messiaslima.codewars.entity.User
 import io.github.messiaslima.codewars.repository.user.UserRepository
 import io.reactivex.android.schedulers.AndroidSchedulers

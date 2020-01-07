@@ -1,28 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="?android:attr/selectableItemBackground"
-    android:clickable="true"
-    android:focusable="true"
-    android:orientation="vertical"
-    android:padding="@dimen/list_item_padding">
+<layout>
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/listItemUserName"
+    <data>
+        <variable
+            name="user"
+            type="io.github.messiaslima.codewars.entity.User" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Messias Lima" />
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="vertical"
+        android:padding="@dimen/list_item_padding">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/listItemUserUsername"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/listItemUserName"
-        tools:text="Messias Lima" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/listItemUserName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="@{user.name}"
+            tools:text="Messias Lima" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/listItemUserUsername"
+            android:layout_width="match_parent"
+            android:text="@{user.username}"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/listItemUserName"
+            tools:text="Messias Lima" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
