@@ -2,6 +2,7 @@
 <layout>
 
     <data>
+
         <variable
             name="user"
             type="io.github.messiaslima.codewars.entity.User" />
@@ -19,21 +20,41 @@
         android:padding="@dimen/list_item_padding">
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/listItemUserName"
+            android:id="@+id/listItemUserUsername"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
             app:layout_constraintTop_toTopOf="parent"
-            android:text="@{user.name}"
+            android:text="@{ user.username }"
             tools:text="Messias Lima" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/listItemUserUsername"
+            android:id="@+id/listItemUserName"
             android:layout_width="match_parent"
-            android:text="@{user.username}"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/listItemUserName"
+            app:layout_constraintTop_toBottomOf="@id/listItemUserUsername"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
             tools:text="Messias Lima" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/listItemUserBestLanguage"
+            app:layout_constraintTop_toBottomOf="@id/listItemUserName"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            android:layout_width="match_parent"
+            tools:text="Best language: Javascript"
+            android:layout_height="wrap_content"/>
+
+        <com.google.android.material.chip.Chip
+            style="@style/Widget.MaterialComponents.Chip.Action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:chipBackgroundColor="@color/colorPrimary"
+            android:text="@{ user.ranks.overall.name }"
+            app:chipIcon="@drawable/ic_rank"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

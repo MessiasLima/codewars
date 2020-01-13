@@ -8,6 +8,7 @@
     <string name="user_search">User search</string>
     <string name="completed_challenges">Completed challenges</string>
     <string name="authored_challenges">Authored challenges</string>
-    <string name="error_getting_completed_challenges">Ocurred an error getting completed challenges</string>
+    <string name="error_getting_completed_challenges">Occurred an error getting completed challenges</string>
     <string name="end_of_results_message">There\'s no more challenges</string>
+    <string name="best_language">Best language: %1$s | Score: %2$d</string>
 </resources>

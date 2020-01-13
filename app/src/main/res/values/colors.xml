@@ -5,4 +5,5 @@
     <color name="colorAccent">#fff</color>
     <color name="colorAccentTranslucid">#A5FFFFFF</color>
     <color name="loading_background">#A4000000</color>
+    <color name="white">#fff</color>
 </resources>
