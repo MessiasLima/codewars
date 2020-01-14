@@ -32,9 +32,9 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_scrollFlags="scroll|enterAlways|snap"
                 app:menu="@menu/menu_users"
+                app:subtitleTextColor="@color/colorAccentTranslucid"
                 app:title="@string/app_name"
-                app:titleTextColor="@color/colorAccent"
-                app:subtitleTextColor="@color/colorAccentTranslucid"/>
+                app:titleTextColor="@color/white" />
 
         </com.google.android.material.appbar.AppBarLayout>
 

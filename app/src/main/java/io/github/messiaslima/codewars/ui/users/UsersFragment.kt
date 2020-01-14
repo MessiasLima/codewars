@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -80,14 +81,39 @@ class UsersFragment : Fragment() {
 
     private fun setupMenuListener() {
         fragmentUsersBinding.usersToolbar.setOnMenuItemClickListener { itemClicked ->
+            return@setOnMenuItemClickListener when (itemClicked.itemId) {
 
-            if (itemClicked.itemId == R.id.menu_item_users_search) {
-                showSearchToolbar()
-                return@setOnMenuItemClickListener true
+                R.id.menu_item_users_search -> {
+                    showSearchToolbar()
+                    true
+                }
+
+                R.id.menu_item_users_filter -> {
+                    showSortMenu()
+                    return@setOnMenuItemClickListener true
+                }
+
+                else -> false
             }
-
-            return@setOnMenuItemClickListener false
         }
+    }
+
+    private fun showSortMenu() {
+
+        val options = arrayOf(getString(R.string.order_by_rank))
+        val checkedItems = BooleanArray(1) { viewModel.sortByRank }
+
+        AlertDialog.Builder(requireContext())
+            .setNeutralButton(R.string.cancel, null)
+            .setMultiChoiceItems(options, checkedItems) { dialog, which, isChecked ->
+                if (which == 0) {
+                    viewModel.sortByRank = isChecked
+                    viewModel.loadUsers()
+                }
+                dialog.dismiss()
+            }
+            .create()
+            .show()
     }
 
     private fun showSearchToolbar() {

@@ -11,4 +11,7 @@
     <string name="error_getting_completed_challenges">Occurred an error getting completed challenges</string>
     <string name="end_of_results_message">There\'s no more challenges</string>
     <string name="best_language">Best language: %1$s | Score: %2$d</string>
+    <string name="order_by_rank">Order by rank</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
 </resources>

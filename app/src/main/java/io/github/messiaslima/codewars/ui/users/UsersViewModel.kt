@@ -1,10 +1,7 @@
 package io.github.messiaslima.codewars.ui.users
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import io.github.messiaslima.codewars.Event
-import io.github.messiaslima.codewars.databinding.ListItemUserBinding
 import io.github.messiaslima.codewars.entity.User
 import io.github.messiaslima.codewars.repository.user.UserRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -15,13 +12,30 @@ import javax.inject.Inject
 
 class UsersViewModel : ViewModel(), SearchUserDialogFragment.OnSearchUserListener {
 
+
     @Inject
     lateinit var userRepository: UserRepository
+
     private val compositeDisposable = CompositeDisposable()
 
     var isLoading = MutableLiveData<Boolean>()
+    private val _loadUsersEvent = MutableLiveData<Unit>()
+    var sortByRank = false
 
-    val savedUsers: LiveData<List<User>> by lazy { userRepository.findSavedUsers() }
+    val savedUsers: LiveData<List<User>> = _loadUsersEvent.switchMap {
+
+        val usersLiveData = userRepository.findSavedUsers()
+
+        return@switchMap if (sortByRank) {
+
+            usersLiveData.map { users ->
+                users.sortedByDescending { it.honor }
+            }
+
+        } else {
+            usersLiveData
+        }
+    }
 
     private val _errorEvent = MutableLiveData<Event<Throwable>>()
     val errorEvent: LiveData<Event<Throwable>> = _errorEvent
@@ -31,6 +45,11 @@ class UsersViewModel : ViewModel(), SearchUserDialogFragment.OnSearchUserListene
 
     init {
         DaggerUsersComponent.create().inject(this)
+        loadUsers()
+    }
+
+    fun loadUsers() {
+        _loadUsersEvent.value = Unit
     }
 
     override fun onSearchUser(username: String) {
@@ -58,7 +77,7 @@ class UsersViewModel : ViewModel(), SearchUserDialogFragment.OnSearchUserListene
     }
 
     fun onUserSelected(selectedUser: User) {
-       _goToDetailsEvent.value = Event(selectedUser)
+        _goToDetailsEvent.value = Event(selectedUser)
     }
 }
 
