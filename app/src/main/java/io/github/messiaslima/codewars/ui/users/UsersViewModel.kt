@@ -20,22 +20,8 @@ class UsersViewModel : ViewModel(), SearchUserDialogFragment.OnSearchUserListene
 
     var isLoading = MutableLiveData<Boolean>()
     private val _loadUsersEvent = MutableLiveData<Unit>()
+
     var sortByRank = false
-
-    val savedUsers: LiveData<List<User>> = _loadUsersEvent.switchMap {
-
-        val usersLiveData = userRepository.findSavedUsers()
-
-        return@switchMap if (sortByRank) {
-
-            usersLiveData.map { users ->
-                users.sortedByDescending { it.honor }
-            }
-
-        } else {
-            usersLiveData
-        }
-    }
 
     private val _errorEvent = MutableLiveData<Event<Throwable>>()
     val errorEvent: LiveData<Event<Throwable>> = _errorEvent
@@ -43,9 +29,21 @@ class UsersViewModel : ViewModel(), SearchUserDialogFragment.OnSearchUserListene
     private val _goToDetailsEvent = MutableLiveData<Event<User>>()
     val goToDetailsEvent: LiveData<Event<User>> = _goToDetailsEvent
 
+    val savedUsers: LiveData<List<User>> = _loadUsersEvent.switchMap {
+        return@switchMap if (sortByRank) {
+            sortUsersByHonor(userRepository.findSavedUsers())
+        } else {
+            userRepository.findSavedUsers()
+        }
+    }
+
     init {
         DaggerUsersComponent.create().inject(this)
         loadUsers()
+    }
+
+    private fun sortUsersByHonor(usersLiveData: LiveData<List<User>>) = usersLiveData.map { users ->
+        users.sortedByDescending { it.honor }
     }
 
     fun loadUsers() {
