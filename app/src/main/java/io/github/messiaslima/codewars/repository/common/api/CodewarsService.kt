@@ -1,5 +1,6 @@
 package io.github.messiaslima.codewars.repository.common.api
 
+import androidx.lifecycle.LiveData
 import io.github.messiaslima.codewars.entity.Challenge
 import io.github.messiaslima.codewars.entity.User
 import io.github.messiaslima.codewars.repository.challenge.datasource.ChallengesAPIResponse
@@ -12,6 +13,9 @@ interface CodewarsService {
 
     @GET("users/{username}")
     fun searchUser(@Path("username") username: String): Single<User>
+
+    @GET("users/{username}")
+    fun searchUserV2(@Path("username") username: String): LiveData<ApiResponse<User>>
 
     @GET("users/{username}/code-challenges/completed")
     fun findCompletedChallenges(

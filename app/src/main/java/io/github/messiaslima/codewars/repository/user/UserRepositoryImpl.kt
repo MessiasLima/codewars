@@ -1,11 +1,15 @@
 package io.github.messiaslima.codewars.repository.user
 
+import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.map
 import io.github.messiaslima.codewars.entity.User
+import io.github.messiaslima.codewars.repository.common.api.ApiResponse
+import io.github.messiaslima.codewars.repository.common.api.ApiSuccessResponse
 import io.github.messiaslima.codewars.repository.user.datasource.UserAPIDataSource
 import io.github.messiaslima.codewars.repository.user.datasource.UserLocalDataSource
-import io.reactivex.Single
 import java.util.*
+import java.util.concurrent.Executors
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
@@ -13,18 +17,23 @@ class UserRepositoryImpl @Inject constructor(
     private val userLocalDataSource: UserLocalDataSource
 ) : UserRepository {
 
-    override fun searchUser(username: String): Single<User> {
-        return userAPIDataSouce.searchUser(username)
-            .map(this::addCreationDate)
-            .flatMap(this::saveUser)
+    override fun searchUserV2(username: String): LiveData<ApiResponse<User>> {
+        return userAPIDataSouce.searchUserV2(username).map {
+            val user = (it as ApiSuccessResponse).body
+            saveUser(user)
+            it
+        }
+    }
+
+    @WorkerThread
+    private fun saveUser(user: User) {
+        Executors.newSingleThreadExecutor().execute {
+            userLocalDataSource.save(addCreationDate(user))
+        }
     }
 
     private fun addCreationDate(user: User) = user.apply {
         creationDate = Date()
-    }
-
-    override fun saveUser(user: User) : Single<User> {
-        return userLocalDataSource.save(user).map { return@map user }
     }
 
     override fun findSavedUsers(limit: Int): LiveData<List<User>> {

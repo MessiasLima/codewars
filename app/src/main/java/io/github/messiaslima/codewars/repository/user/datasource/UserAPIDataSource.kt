@@ -13,4 +13,5 @@ class UserAPIDataSource @Inject constructor(
         return codewarsService.searchUser(username)
     }
 
+    fun searchUserV2(username: String) = codewarsService.searchUserV2(username)
 }

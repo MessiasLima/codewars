@@ -11,7 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import io.github.messiaslima.codewars.EventObserver
+import io.github.messiaslima.codewars.util.EventObserver
 import io.github.messiaslima.codewars.R
 import io.github.messiaslima.codewars.databinding.FragmentUsersBinding
 import io.github.messiaslima.codewars.entity.User
@@ -45,15 +45,17 @@ class UsersFragment : Fragment() {
     }
 
     private fun setupNavigationEvent() {
-        viewModel.goToDetailsEvent.observe(viewLifecycleOwner, EventObserver {
-            navigateToDetails(it)
-        })
+        viewModel.goToDetailsEvent.observe(viewLifecycleOwner,
+            EventObserver {
+                navigateToDetails(it)
+            })
     }
 
     private fun setupErrorHandler() {
-        viewModel.errorEvent.observe(viewLifecycleOwner, EventObserver {
-            showErrorMessage("", it)
-        })
+        viewModel.errorEvent.observe(viewLifecycleOwner,
+            EventObserver {
+                showErrorMessage("", it)
+            })
     }
 
     private fun setupUsersRecyclerView() {

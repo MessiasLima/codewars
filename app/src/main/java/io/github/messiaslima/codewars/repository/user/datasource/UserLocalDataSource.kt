@@ -12,7 +12,7 @@ import io.reactivex.Single
 interface UserLocalDataSource {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun save(user: User): Single<Long>
+    fun save(user: User): Long
 
     @Query("SELECT * FROM User ORDER BY creationDate desc LIMIT :limit;")
     fun findLastUsers(limit: Int): LiveData<List<User>>

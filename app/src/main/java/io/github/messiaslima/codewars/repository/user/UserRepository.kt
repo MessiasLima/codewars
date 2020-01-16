@@ -2,10 +2,11 @@ package io.github.messiaslima.codewars.repository.user
 
 import androidx.lifecycle.LiveData
 import io.github.messiaslima.codewars.entity.User
+import io.github.messiaslima.codewars.repository.common.api.ApiResponse
+import io.github.messiaslima.codewars.repository.common.api.ApiSuccessResponse
 import io.reactivex.Single
 
 interface UserRepository {
-    fun searchUser(username: String): Single<User>
-    fun saveUser(user: User): Single<User>
+    fun searchUserV2(username: String): LiveData<ApiResponse<User>>
     fun findSavedUsers(limit: Int = 5): LiveData<List<User>>
 }

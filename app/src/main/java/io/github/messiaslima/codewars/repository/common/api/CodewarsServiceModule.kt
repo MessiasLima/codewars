@@ -17,6 +17,7 @@ class CodewarsServiceModule {
             .baseUrl("https://www.codewars.com/api/v1/")
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addCallAdapterFactory(LiveDataCallAdapterFactory())
             .build()
 
         return retrofit.create<CodewarsService>(
