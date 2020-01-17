@@ -74,7 +74,7 @@ class UsersFragment : Fragment() {
             )
         )
 
-        viewModel.savedUsers.observe(viewLifecycleOwner, Observer(usersAdapter::updateUsers))
+        viewModel.users.observe(viewLifecycleOwner, Observer(usersAdapter::updateUsers))
     }
 
     private fun navigateToDetails(user: User) {
@@ -103,14 +103,13 @@ class UsersFragment : Fragment() {
     private fun showSortMenu() {
 
         val options = arrayOf(getString(R.string.order_by_rank))
-        val checkedItems = BooleanArray(1) { viewModel.sortByRank }
+        val checkedItems = BooleanArray(1) { viewModel.sortByHonor.value == true }
 
         AlertDialog.Builder(requireContext())
             .setNeutralButton(R.string.cancel, null)
             .setMultiChoiceItems(options, checkedItems) { dialog, which, isChecked ->
                 if (which == 0) {
-                    viewModel.sortByRank = isChecked
-                    viewModel.loadUsers()
+                    viewModel.setSortByHonor(isChecked)
                 }
                 dialog.dismiss()
             }

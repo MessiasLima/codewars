@@ -12,19 +12,32 @@ class UsersViewModel : ViewModel(), SearchUserDialogFragment.OnSearchUserListene
     @Inject
     lateinit var userRepository: UserRepository
 
-    var isLoading = MutableLiveData<Boolean>()
-    private val _loadUsersEvent = MutableLiveData<Unit>()
+    val isLoading = MutableLiveData<Boolean>()
 
-    var sortByRank = false
+    private val _sortByHonor = MutableLiveData<Boolean>()
+    val sortByHonor = _sortByHonor
 
     private val _errorEvent = MutableLiveData<Event<Throwable>>()
     val errorEvent: LiveData<Event<Throwable>> = _errorEvent
 
-    val savedUsers: LiveData<List<User>> = _loadUsersEvent.switchMap {
-        return@switchMap if (sortByRank) {
-            sortUsersByHonor(userRepository.findSavedUsers())
-        } else {
-            userRepository.findSavedUsers()
+    private val _loadUsersEvent = MutableLiveData<Unit>()
+
+    private val _users = _loadUsersEvent.switchMap {
+        userRepository.findSavedUsers(sortByHonor = sortByHonor.value == true)
+    }
+
+    private val _sortedUsers = _sortByHonor.switchMap {
+        userRepository.findSavedUsers(sortByHonor = it)
+    }
+
+    val users = MediatorLiveData<List<User>>().also { mediator ->
+
+        mediator.addSource(_users) { userList ->
+            mediator.value = userList
+        }
+
+        mediator.addSource(_sortedUsers) { userList ->
+            mediator.value = userList
         }
     }
 
@@ -40,14 +53,6 @@ class UsersViewModel : ViewModel(), SearchUserDialogFragment.OnSearchUserListene
 
     init {
         DaggerUsersComponent.create().inject(this)
-        loadUsers()
-    }
-
-    private fun sortUsersByHonor(usersLiveData: LiveData<List<User>>) = usersLiveData.map { users ->
-        users.sortedByDescending { it.honor }
-    }
-
-    fun loadUsers() {
         _loadUsersEvent.value = Unit
     }
 
@@ -57,6 +62,10 @@ class UsersViewModel : ViewModel(), SearchUserDialogFragment.OnSearchUserListene
 
     fun onUserSelected(selectedUser: User) {
         _goToDetailsEvent.value = Event(selectedUser)
+    }
+
+    fun setSortByHonor(sortByHonor: Boolean) {
+        _sortByHonor.value = sortByHonor
     }
 }
 

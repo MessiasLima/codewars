@@ -36,7 +36,16 @@ class UserRepositoryImpl @Inject constructor(
         creationDate = Date()
     }
 
-    override fun findSavedUsers(limit: Int): LiveData<List<User>> {
-        return userLocalDataSource.findLastUsers(limit)
+    override fun findSavedUsers(sortByHonor: Boolean, limit: Int): LiveData<List<User>> {
+        var users = userLocalDataSource.findLastUsers(limit)
+        if (sortByHonor){
+            users = sortUsersByHonor(users)
+        }
+        return users
+    }
+
+
+    private fun sortUsersByHonor(usersLiveData: LiveData<List<User>>) = usersLiveData.map { users ->
+        users.sortedByDescending { it.honor }
     }
 }

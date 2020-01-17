@@ -8,5 +8,9 @@ import io.reactivex.Single
 
 interface UserRepository {
     fun searchUserV2(username: String): LiveData<ApiResponse<User>>
-    fun findSavedUsers(limit: Int = 5): LiveData<List<User>>
+
+    fun findSavedUsers(
+        sortByHonor: Boolean = false,
+        limit: Int = 5
+    ): LiveData<List<User>>
 }
