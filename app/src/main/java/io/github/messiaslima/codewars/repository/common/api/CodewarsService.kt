@@ -12,10 +12,7 @@ import retrofit2.http.Query
 interface CodewarsService {
 
     @GET("users/{username}")
-    fun searchUser(@Path("username") username: String): Single<User>
-
-    @GET("users/{username}")
-    fun searchUserV2(@Path("username") username: String): LiveData<ApiResponse<User>>
+    fun searchUser(@Path("username") username: String): LiveData<ApiResponse<User>>
 
     @GET("users/{username}/code-challenges/completed")
     fun findCompletedChallenges(

@@ -19,35 +19,29 @@ class UserRepositoryImpl @Inject constructor(
     private val userLocalDataSource: UserLocalDataSource
 ) : UserRepository {
 
-    override fun searchUserV2(username: String): LiveData<Resource<User>> {
+    override fun searchUser(username: String): LiveData<Resource<User>> {
 
-        val apiResponse = userAPIDataSouce.searchUserV2(username).map {
-            val user = (it as ApiSuccessResponse).body
-            saveUser(user)
-            it
-        }
+        val apiResponse = userAPIDataSouce.searchUser(username)
 
-        val userResource = MediatorLiveData<Resource<User>>().also { mediator ->
+        val userResource = MediatorLiveData<Resource<User>>()
 
-            mediator.addSource(apiResponse) { response ->
+        userResource.addSource(apiResponse) { response ->
+            when(response) {
 
-                when(response) {
-
-                    is ApiSuccessResponse -> {
-                        mediator.value = Resource.success(response.body)
-                    }
-
-                    is ApiErrorResponse -> {
-                        mediator.value = Resource.error(
-                            msg = response.errorMessage,
-                            data = null,
-                            throwable = response.throwable
-                        )
-                    }
+                is ApiSuccessResponse -> {
+                    val user = response.body
+                    saveUser(user)
+                    userResource.value = Resource.success(response.body)
                 }
 
+                is ApiErrorResponse -> {
+                    userResource.value = Resource.error(
+                        msg = response.errorMessage,
+                        data = null,
+                        throwable = response.throwable
+                    )
+                }
             }
-
         }
 
         userResource.value = Resource.loading(null)

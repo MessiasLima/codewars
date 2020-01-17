@@ -9,7 +9,7 @@ import io.reactivex.Single
 
 interface UserRepository {
 
-    fun searchUserV2(username: String): LiveData<Resource<User>>
+    fun searchUser(username: String): LiveData<Resource<User>>
 
     fun findSavedUsers(
         sortByHonor: Boolean = false,

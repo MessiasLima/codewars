@@ -40,7 +40,7 @@ class UsersViewModel : ViewModel(), SearchUserDialogFragment.OnSearchUserListene
     private val _userQueryEvent = MutableLiveData<String>()
     private val _userClickedEvent = MutableLiveData<User>()
     private val _userFound = _userQueryEvent.switchMap { query ->
-        userRepository.searchUserV2(query)
+        userRepository.searchUser(query)
     }
 
     private val _goToDetailsEvent = MediatorLiveData<Event<Resource<User>>>().also { mediator->
