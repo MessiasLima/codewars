@@ -32,7 +32,7 @@ class SearchUserDialogFragment : DialogFragment() {
             triggerSearchListener()
         }
 
-        userSearchEditText.setOnEditorActionListener { v, actionId, event ->
+        userSearchEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 triggerSearchListener()
                 return@setOnEditorActionListener true

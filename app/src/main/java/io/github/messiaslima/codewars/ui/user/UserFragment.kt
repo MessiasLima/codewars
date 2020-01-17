@@ -74,7 +74,7 @@ class UserFragment : Fragment(), UserContract.View {
 
     private fun setupMenuListener() {
         userToolbar.setNavigationOnClickListener {
-            fragmentManager?.popBackStack()
+            parentFragmentManager.popBackStack()
         }
     }
 

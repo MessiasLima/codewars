@@ -41,6 +41,11 @@ android {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
 
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
 }
 
 dependencies {
@@ -51,12 +56,12 @@ dependencies {
     def roomVersion = "2.2.3"
     def fragmentKtxVersion = '1.2.0-rc05'
 
+    // Core
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.core:core-ktx:1.1.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    testImplementation 'junit:junit:4.12'
     implementation "androidx.lifecycle:lifecycle-extensions:2.1.0"
     implementation "androidx.fragment:fragment-ktx:$fragmentKtxVersion"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0-rc03"
@@ -64,6 +69,8 @@ dependencies {
     // Testing
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    testImplementation 'org.robolectric:robolectric:4.3'
+    testImplementation 'junit:junit:4.12'
 
     // Dagger dependencies
     implementation "com.google.dagger:dagger:$daggerVersion"

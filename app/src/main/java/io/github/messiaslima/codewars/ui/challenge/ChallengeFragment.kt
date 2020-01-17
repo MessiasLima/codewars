@@ -42,7 +42,7 @@ class ChallengeFragment : Fragment() {
 
     private fun setupBackButton() {
         challengeToolbar.setNavigationOnClickListener {
-            fragmentManager?.popBackStack()
+            parentFragmentManager.popBackStack()
         }
     }
 
