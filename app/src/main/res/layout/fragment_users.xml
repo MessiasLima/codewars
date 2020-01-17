@@ -9,6 +9,10 @@
             name="viewModel"
             type="io.github.messiaslima.codewars.ui.users.UsersViewModel" />
 
+        <variable
+            name="isLoading"
+            type="Boolean" />
+
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -49,7 +53,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/loading_background"
-            android:visibility="@{ viewModel.isLoading ? View.VISIBLE : View.GONE, default = gone }">
+            android:visibility="@{ isLoading ? View.VISIBLE : View.GONE, default = gone }">
 
             <ProgressBar
                 android:layout_width="wrap_content"

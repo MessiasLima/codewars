@@ -8,6 +8,7 @@ import io.github.messiaslima.codewars.repository.common.api.ApiResponse
 import io.github.messiaslima.codewars.repository.common.api.ApiSuccessResponse
 import io.github.messiaslima.codewars.repository.user.datasource.UserAPIDataSource
 import io.github.messiaslima.codewars.repository.user.datasource.UserLocalDataSource
+import io.github.messiaslima.codewars.util.Resource
 import java.util.*
 import java.util.concurrent.Executors
 import javax.inject.Inject
@@ -36,12 +37,17 @@ class UserRepositoryImpl @Inject constructor(
         creationDate = Date()
     }
 
-    override fun findSavedUsers(sortByHonor: Boolean, limit: Int): LiveData<List<User>> {
+    override fun findSavedUsers(sortByHonor: Boolean, limit: Int): LiveData<Resource<List<User>>> {
+
         var users = userLocalDataSource.findLastUsers(limit)
-        if (sortByHonor){
+
+        if (sortByHonor) {
             users = sortUsersByHonor(users)
         }
-        return users
+
+        return users.map {
+            Resource.success(it)
+        }
     }
 
 

@@ -5,6 +5,8 @@ import io.github.messiaslima.codewars.entity.User
 import io.github.messiaslima.codewars.repository.common.api.ApiSuccessResponse
 import io.github.messiaslima.codewars.repository.user.UserRepository
 import io.github.messiaslima.codewars.util.Event
+import io.github.messiaslima.codewars.util.Resource
+import io.github.messiaslima.codewars.util.Status
 import javax.inject.Inject
 
 class UsersViewModel : ViewModel(), SearchUserDialogFragment.OnSearchUserListener {
@@ -12,13 +14,8 @@ class UsersViewModel : ViewModel(), SearchUserDialogFragment.OnSearchUserListene
     @Inject
     lateinit var userRepository: UserRepository
 
-    val isLoading = MutableLiveData<Boolean>()
-
     private val _sortByHonor = MutableLiveData<Boolean>()
     val sortByHonor = _sortByHonor
-
-    private val _errorEvent = MutableLiveData<Event<Throwable>>()
-    val errorEvent: LiveData<Event<Throwable>> = _errorEvent
 
     private val _loadUsersEvent = MutableLiveData<Unit>()
 
@@ -30,7 +27,7 @@ class UsersViewModel : ViewModel(), SearchUserDialogFragment.OnSearchUserListene
         userRepository.findSavedUsers(sortByHonor = it)
     }
 
-    val users = MediatorLiveData<List<User>>().also { mediator ->
+    val users = MediatorLiveData<Resource<List<User>>>().also { mediator ->
 
         mediator.addSource(_users) { userList ->
             mediator.value = userList
@@ -40,6 +37,15 @@ class UsersViewModel : ViewModel(), SearchUserDialogFragment.OnSearchUserListene
             mediator.value = userList
         }
     }
+
+    val isLoading = MediatorLiveData<Boolean>().also { isLoadingMediator ->
+
+        isLoadingMediator.addSource(users) { resource ->
+            isLoadingMediator.value = resource.status == Status.LOADING
+        }
+    }
+
+    /**---------------------------------------------------------------**/
 
     private val _userQuery = MutableLiveData<String>()
 

@@ -11,13 +11,13 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import io.github.messiaslima.codewars.util.EventObserver
 import io.github.messiaslima.codewars.R
 import io.github.messiaslima.codewars.databinding.FragmentUsersBinding
 import io.github.messiaslima.codewars.entity.User
 import io.github.messiaslima.codewars.ui.shared.navigateTo
-import io.github.messiaslima.codewars.ui.shared.showErrorMessage
 import io.github.messiaslima.codewars.ui.user.UserFragment
+import io.github.messiaslima.codewars.util.EventObserver
+import io.github.messiaslima.codewars.util.Status
 
 class UsersFragment : Fragment() {
 
@@ -40,7 +40,6 @@ class UsersFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupMenuListener()
         setupUsersRecyclerView()
-        setupErrorHandler()
         setupNavigationEvent()
     }
 
@@ -48,13 +47,6 @@ class UsersFragment : Fragment() {
         viewModel.goToDetailsEvent.observe(viewLifecycleOwner,
             EventObserver {
                 navigateToDetails(it)
-            })
-    }
-
-    private fun setupErrorHandler() {
-        viewModel.errorEvent.observe(viewLifecycleOwner,
-            EventObserver {
-                showErrorMessage("", it)
             })
     }
 
@@ -74,7 +66,12 @@ class UsersFragment : Fragment() {
             )
         )
 
-        viewModel.users.observe(viewLifecycleOwner, Observer(usersAdapter::updateUsers))
+        viewModel.users.observe(viewLifecycleOwner, Observer { response ->
+            if (response.status == Status.SUCCESS) {
+                usersAdapter.updateUsers(response.data!!)
+            }
+        })
+
     }
 
     private fun navigateToDetails(user: User) {

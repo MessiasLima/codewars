@@ -8,7 +8,7 @@ fun Fragment.navigateTo(fragment: Fragment) {
     (activity as MainActivity).showFragment(fragment)
 }
 
-fun Fragment.showErrorMessage(message: String, throwable: Throwable?) {
+fun Fragment.showErrorMessage(message: String?, throwable: Throwable?) {
 
     var errorMessage = message
 
