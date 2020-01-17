@@ -14,4 +14,6 @@
     <string name="order_by_rank">Order by rank</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="user_not_found">User not found</string>
 </resources>

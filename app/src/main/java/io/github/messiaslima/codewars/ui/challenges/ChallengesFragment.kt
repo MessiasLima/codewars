@@ -95,7 +95,7 @@ class ChallengesFragment : Fragment(), ChallengesContract.View {
     }
 
     private fun setupLoadingListener() {
-        viewModel.isLoading.observe(this, Observer {
+        viewModel.isLoading.observe(viewLifecycleOwner, Observer {
             progressBar.visibility = if (it) View.VISIBLE else View.GONE
         })
     }
@@ -109,7 +109,7 @@ class ChallengesFragment : Fragment(), ChallengesContract.View {
         challengesRecyclerView.layoutManager = layoutManager
         challengesRecyclerView.itemAnimator = DefaultItemAnimator()
         challengesRecyclerView.addItemDecoration(DividerItemDecoration(context, layoutManager.orientation))
-        viewModel.challenges.observe(this, Observer(adapter::addChallenges))
+        viewModel.challenges.observe(viewLifecycleOwner, Observer(adapter::addChallenges))
     }
 
     private fun showChallengeDetails(challenge: Challenge){
@@ -117,7 +117,7 @@ class ChallengesFragment : Fragment(), ChallengesContract.View {
     }
 
     override fun handleError(throwable: Throwable?) {
-        showErrorMessage(getString(R.string.error_getting_completed_challenges), throwable)
+        showErrorMessage(getString(R.string.error_getting_completed_challenges))
     }
 
     override fun showEndOfResultsMessage() {

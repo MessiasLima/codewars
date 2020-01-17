@@ -14,7 +14,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.messiaslima.codewars.R
 import io.github.messiaslima.codewars.databinding.FragmentUsersBinding
 import io.github.messiaslima.codewars.entity.User
+import io.github.messiaslima.codewars.exception.ResourceNotFoundException
 import io.github.messiaslima.codewars.ui.shared.navigateTo
+import io.github.messiaslima.codewars.ui.shared.showErrorMessage
 import io.github.messiaslima.codewars.ui.user.UserFragment
 import io.github.messiaslima.codewars.util.EventObserver
 import io.github.messiaslima.codewars.util.Status
@@ -47,6 +49,8 @@ class UsersFragment : Fragment() {
         viewModel.goToDetailsEvent.observe(viewLifecycleOwner, EventObserver { resource ->
             if (resource.status == Status.SUCCESS) {
                 navigateToDetails(resource.data!!)
+            } else {
+                handleErrors(resource.throwable)
             }
         })
     }
@@ -118,5 +122,19 @@ class UsersFragment : Fragment() {
     private fun showSearchToolbar() {
         SearchUserDialogFragment.newInstance(viewModel)
             .show(parentFragmentManager, "dialog_fragment_search_user")
+    }
+
+
+    private fun handleErrors(throwable: Throwable?) {
+
+        when (throwable) {
+
+            is ResourceNotFoundException -> {
+                showErrorMessage(R.string.user_not_found)
+            }
+
+            else -> showErrorMessage(getString(R.string.unknown_error))
+        }
+
     }
 }

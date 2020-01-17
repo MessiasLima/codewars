@@ -50,8 +50,11 @@ class UsersViewModel : ViewModel(), SearchUserDialogFragment.OnSearchUserListene
         }
 
         mediator.addSource(_userFound) { userResource ->
-            mediator.value = Event(userResource)
+            if (userResource.status != Status.LOADING) {
+                mediator.value = Event(userResource)
+            }
         }
+
     }
     val goToDetailsEvent: LiveData<Event<Resource<User>>> = _goToDetailsEvent
 

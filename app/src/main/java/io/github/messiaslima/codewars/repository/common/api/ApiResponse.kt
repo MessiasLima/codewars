@@ -1,6 +1,7 @@
 package io.github.messiaslima.codewars.repository.common.api
 
 
+import io.github.messiaslima.codewars.exception.ResourceNotFoundException
 import retrofit2.Response
 
 /**
@@ -26,13 +27,21 @@ sealed class ApiResponse<T> {
                     ApiSuccessResponse(body)
                 }
             } else {
+
                 val msg = response.errorBody()?.string()
+
                 val errorMsg = if (msg.isNullOrEmpty()) {
                     response.message()
                 } else {
                     msg
                 }
-                ApiErrorResponse(errorMsg ?: "unknown error")
+
+                val exception = when(response.code()) {
+                    404 -> ResourceNotFoundException()
+                    else -> null
+                }
+
+                ApiErrorResponse(errorMsg ?: "unknown error", exception)
             }
         }
     }
