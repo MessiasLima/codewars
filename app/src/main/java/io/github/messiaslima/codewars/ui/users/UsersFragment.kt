@@ -44,10 +44,11 @@ class UsersFragment : Fragment() {
     }
 
     private fun setupNavigationEvent() {
-        viewModel.goToDetailsEvent.observe(viewLifecycleOwner,
-            EventObserver {
-                navigateToDetails(it)
-            })
+        viewModel.goToDetailsEvent.observe(viewLifecycleOwner, EventObserver { resource ->
+            if (resource.status == Status.SUCCESS) {
+                navigateToDetails(resource.data!!)
+            }
+        })
     }
 
     private fun setupUsersRecyclerView() {

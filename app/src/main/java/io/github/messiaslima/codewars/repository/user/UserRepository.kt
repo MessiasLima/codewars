@@ -8,7 +8,8 @@ import io.github.messiaslima.codewars.util.Resource
 import io.reactivex.Single
 
 interface UserRepository {
-    fun searchUserV2(username: String): LiveData<ApiResponse<User>>
+
+    fun searchUserV2(username: String): LiveData<Resource<User>>
 
     fun findSavedUsers(
         sortByHonor: Boolean = false,

@@ -2,7 +2,6 @@ package io.github.messiaslima.codewars.ui.users
 
 import androidx.lifecycle.*
 import io.github.messiaslima.codewars.entity.User
-import io.github.messiaslima.codewars.repository.common.api.ApiSuccessResponse
 import io.github.messiaslima.codewars.repository.user.UserRepository
 import io.github.messiaslima.codewars.util.Event
 import io.github.messiaslima.codewars.util.Resource
@@ -38,24 +37,35 @@ class UsersViewModel : ViewModel(), SearchUserDialogFragment.OnSearchUserListene
         }
     }
 
-    val isLoading = MediatorLiveData<Boolean>().also { isLoadingMediator ->
+    private val _userQueryEvent = MutableLiveData<String>()
+    private val _userClickedEvent = MutableLiveData<User>()
+    private val _userFound = _userQueryEvent.switchMap { query ->
+        userRepository.searchUserV2(query)
+    }
+
+    private val _goToDetailsEvent = MediatorLiveData<Event<Resource<User>>>().also { mediator->
+
+        mediator.addSource(_userClickedEvent) { clickedUser ->
+            mediator.value = Event(Resource.success(clickedUser))
+        }
+
+        mediator.addSource(_userFound) { userResource ->
+            mediator.value = Event(userResource)
+        }
+    }
+    val goToDetailsEvent: LiveData<Event<Resource<User>>> = _goToDetailsEvent
+
+    private val _isLoading = MediatorLiveData<Boolean>().also { isLoadingMediator ->
 
         isLoadingMediator.addSource(users) { resource ->
             isLoadingMediator.value = resource.status == Status.LOADING
         }
+
+        isLoadingMediator.addSource(_userFound) { resource ->
+            isLoadingMediator.value = resource.status == Status.LOADING
+        }
     }
-
-    /**---------------------------------------------------------------**/
-
-    private val _userQuery = MutableLiveData<String>()
-
-    private val _goToDetailsEvent = MutableLiveData<Event<User>>()
-
-    val goToDetailsEvent: LiveData<Event<User>> = _userQuery.switchMap {
-        userRepository.searchUserV2(it)
-    }.map {
-        Event((it as ApiSuccessResponse).body)
-    }
+    val isLoading : LiveData<Boolean> = _isLoading
 
     init {
         DaggerUsersComponent.create().inject(this)
@@ -63,11 +73,11 @@ class UsersViewModel : ViewModel(), SearchUserDialogFragment.OnSearchUserListene
     }
 
     override fun onSearchUser(username: String) {
-        _userQuery.value = username
+        _userQueryEvent.value = username
     }
 
     fun onUserSelected(selectedUser: User) {
-        _goToDetailsEvent.value = Event(selectedUser)
+        _userClickedEvent.value = selectedUser
     }
 
     fun setSortByHonor(sortByHonor: Boolean) {
