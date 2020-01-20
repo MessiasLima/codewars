@@ -49,7 +49,7 @@ class UsersAdapter(
             )
         }
 
-        private fun getValidName(user: User): String? {
+        fun getValidName(user: User): String? {
             return if (user.name?.isNotBlank() == true) {
                 user.name
             } else {
