@@ -3,6 +3,7 @@ package io.github.messiaslima.codewars.util
 import org.junit.Test
 
 import org.junit.Assert.*
+import org.mockito.Mockito.*
 
 class EventTest {
 
@@ -40,5 +41,24 @@ class EventTest {
         val content = Math.random().toString()
         val event = Event(content)
         assertEquals(event.peekContent(), content)
+    }
+
+    @Test
+    fun eventObserver_trigger_once_per_event() {
+
+        val testString = "Some string"
+        val event = Event(testString)
+
+        val mockedUnit = spy(TestObserverUnit::class.java)
+        val observer = EventObserver(mockedUnit::unitToBeMocked)
+
+        observer.onChanged(event)
+        observer.onChanged(event)
+
+        verify(mockedUnit, times(1)).unitToBeMocked(testString)
+    }
+
+    interface TestObserverUnit{
+        fun unitToBeMocked(str: String)
     }
 }
