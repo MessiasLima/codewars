@@ -15,8 +15,7 @@ import javax.inject.Inject
 
 class ChallengesViewModel(
     private val user: User,
-    private val challengeType: ChallengeType,
-    private val view: ChallengesContract.View
+    private val challengeType: ChallengeType
 ) : ViewModel() {
 
     var endOfListMessageShown: Boolean = false
@@ -51,7 +50,7 @@ class ChallengesViewModel(
                 _challenges.value = challenges
                 updatePaginationVariables(challenges.size)
             }, { throwable ->
-                view.handleError(throwable)
+
             })
             .addTo(compositeDisposable)
     }
@@ -77,13 +76,12 @@ class ChallengesViewModel(
 
     class Factory(
         private val user: User,
-        private val challengeType: ChallengeType,
-        private val view: ChallengesContract.View
+        private val challengeType: ChallengeType
     ) : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return ChallengesViewModel(user, challengeType, view) as T
+            return ChallengesViewModel(user, challengeType) as T
         }
     }
 }

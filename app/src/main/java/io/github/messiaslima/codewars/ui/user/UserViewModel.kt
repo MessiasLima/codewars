@@ -5,18 +5,19 @@ import androidx.lifecycle.ViewModelProvider
 import io.github.messiaslima.codewars.entity.User
 
 class UserViewModel(
-    private val view: UserContract.View,
-    val user: User
+    user: User
 ) : ViewModel() {
 
+    var name = user.name ?: user.username
+    var username = if (user.name.isNullOrEmpty()) null else user.username
+
     class Factory constructor(
-        private val view: UserContract.View,
         private val user: User
     ) : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return UserViewModel(view, user) as T
+            return UserViewModel(user) as T
         }
     }
 

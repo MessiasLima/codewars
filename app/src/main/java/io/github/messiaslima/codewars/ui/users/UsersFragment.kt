@@ -15,8 +15,8 @@ import io.github.messiaslima.codewars.R
 import io.github.messiaslima.codewars.databinding.FragmentUsersBinding
 import io.github.messiaslima.codewars.entity.User
 import io.github.messiaslima.codewars.exception.ResourceNotFoundException
-import io.github.messiaslima.codewars.ui.shared.navigateTo
-import io.github.messiaslima.codewars.ui.shared.showErrorMessage
+import io.github.messiaslima.codewars.ui.common.navigateTo
+import io.github.messiaslima.codewars.ui.common.showErrorMessage
 import io.github.messiaslima.codewars.ui.user.UserFragment
 import io.github.messiaslima.codewars.util.EventObserver
 import io.github.messiaslima.codewars.util.Status

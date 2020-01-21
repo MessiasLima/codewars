@@ -1,9 +1,8 @@
-package io.github.messiaslima.codewars.ui.shared
+package io.github.messiaslima.codewars.ui.common
 
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import com.pd.chocobar.ChocoBar
-import retrofit2.HttpException
 
 fun Fragment.navigateTo(fragment: Fragment) {
     (activity as MainActivity).showFragment(fragment)

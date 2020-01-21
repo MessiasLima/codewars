@@ -18,11 +18,11 @@ import io.github.messiaslima.codewars.databinding.FragmentChallengesBinding
 import io.github.messiaslima.codewars.entity.Challenge
 import io.github.messiaslima.codewars.entity.User
 import io.github.messiaslima.codewars.ui.challenge.ChallengeFragment
-import io.github.messiaslima.codewars.ui.shared.navigateTo
-import io.github.messiaslima.codewars.ui.shared.showErrorMessage
+import io.github.messiaslima.codewars.ui.common.navigateTo
+import io.github.messiaslima.codewars.ui.common.showErrorMessage
 import kotlinx.android.synthetic.main.fragment_challenges.*
 
-class ChallengesFragment : Fragment(), ChallengesContract.View {
+class ChallengesFragment : Fragment() {
 
     private lateinit var user: User
     private lateinit var challengeType: ChallengeType
@@ -39,7 +39,7 @@ class ChallengesFragment : Fragment(), ChallengesContract.View {
 
         viewModel = ViewModelProviders.of(
             this,
-            ChallengesViewModel.Factory(user, challengeType, this)
+            ChallengesViewModel.Factory(user, challengeType)
         )[ChallengesViewModel::class.java]
 
         val binding = FragmentChallengesBinding.inflate(inflater, container, false)
@@ -116,11 +116,11 @@ class ChallengesFragment : Fragment(), ChallengesContract.View {
         navigateTo(ChallengeFragment.getInstance(challenge))
     }
 
-    override fun handleError(throwable: Throwable?) {
+    fun handleError(throwable: Throwable?) {
         showErrorMessage(getString(R.string.error_getting_completed_challenges))
     }
 
-    override fun showEndOfResultsMessage() {
+    fun showEndOfResultsMessage() {
 
         ChocoBar.builder()
             .setView(view)

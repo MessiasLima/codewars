@@ -1,4 +1,4 @@
-package io.github.messiaslima.codewars.ui.shared
+package io.github.messiaslima.codewars.ui.common
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

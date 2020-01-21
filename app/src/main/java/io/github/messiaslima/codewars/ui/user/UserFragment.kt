@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager2.widget.ViewPager2
 import io.github.messiaslima.codewars.R
@@ -13,10 +14,15 @@ import io.github.messiaslima.codewars.databinding.FragmentUserBinding
 import io.github.messiaslima.codewars.entity.User
 import kotlinx.android.synthetic.main.fragment_user.*
 
-class UserFragment : Fragment(), UserContract.View {
+class UserFragment : Fragment() {
 
-    lateinit var viewModel: UserViewModel
-    lateinit var user: User
+    val user: User by lazy {
+        arguments?.getSerializable("user") as User
+    }
+
+    val viewModel by viewModels<UserViewModel>(factoryProducer = {
+        UserViewModel.Factory(user)
+    })
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -24,15 +30,9 @@ class UserFragment : Fragment(), UserContract.View {
         savedInstanceState: Bundle?
     ): View? {
 
-        user = arguments?.getSerializable("user") as User
-
-        viewModel = ViewModelProviders.of(
-            this,
-            UserViewModel.Factory(this, user)
-        )[UserViewModel::class.java]
-
         val binding = FragmentUserBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
 
         return binding.root
     }

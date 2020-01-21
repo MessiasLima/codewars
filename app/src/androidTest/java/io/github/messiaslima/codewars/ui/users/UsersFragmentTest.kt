@@ -10,7 +10,7 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.github.messiaslima.codewars.R
-import io.github.messiaslima.codewars.ui.shared.MainActivity
+import io.github.messiaslima.codewars.ui.common.MainActivity
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith

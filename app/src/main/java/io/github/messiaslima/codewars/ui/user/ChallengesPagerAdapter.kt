@@ -7,7 +7,7 @@ import io.github.messiaslima.codewars.ui.challenges.ChallengeType
 import io.github.messiaslima.codewars.ui.challenges.ChallengesFragment
 
 class ChallengesPagerAdapter(
-    private val userFragment: UserFragment,
+    userFragment: UserFragment,
     private val user: User
 ) : FragmentStateAdapter(userFragment) {
 
