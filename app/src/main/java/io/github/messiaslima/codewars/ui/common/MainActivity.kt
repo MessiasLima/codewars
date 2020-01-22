@@ -12,15 +12,17 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         if (savedInstanceState == null) {
-            showFragment(UsersFragment())
+            showFragment(UsersFragment(), false)
         }
     }
 
-    fun showFragment(fragment: Fragment){
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainer, fragment)
-            .addToBackStack(fragment.tag)
-            .commit()
+    fun showFragment(fragment: Fragment, addToBackStack: Boolean = true) {
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.fragmentContainer, fragment)
+        if (addToBackStack) {
+            transaction.addToBackStack(fragment.tag)
+        }
+        transaction.commit()
     }
 
 }
