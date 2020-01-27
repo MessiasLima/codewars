@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -24,9 +25,17 @@ import kotlinx.android.synthetic.main.fragment_challenges.*
 
 class ChallengesFragment : Fragment() {
 
-    private lateinit var user: User
-    private lateinit var challengeType: ChallengeType
-    private lateinit var viewModel: ChallengesViewModel
+    private val user: User by lazy {
+        arguments?.get("user") as User
+    }
+
+    private val challengeType: ChallengeType by lazy {
+        arguments?.get("challengeType") as ChallengeType
+    }
+
+    private val viewModel: ChallengesViewModel by viewModels {
+        ChallengesViewModel.Factory(user, challengeType)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,17 +43,9 @@ class ChallengesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        user = arguments?.get("user") as User
-        challengeType = arguments?.get("challengeType") as ChallengeType
-
-        viewModel = ViewModelProviders.of(
-            this,
-            ChallengesViewModel.Factory(user, challengeType)
-        )[ChallengesViewModel::class.java]
-
         val binding = FragmentChallengesBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
-        binding.lifecycleOwner = this
+        binding.lifecycleOwner = viewLifecycleOwner
 
         return binding.root
     }
@@ -58,6 +59,7 @@ class ChallengesFragment : Fragment() {
 
     private fun setupScrollListener() {
         challengesRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 val layoutManager = challengesRecyclerView.layoutManager as LinearLayoutManager
@@ -74,6 +76,7 @@ class ChallengesFragment : Fragment() {
                 ){
                     showEndOfResultsMessage()
                 }
+
             }
 
             private fun shouldGetNextPage(layoutManager: LinearLayoutManager): Boolean{
@@ -89,8 +92,7 @@ class ChallengesFragment : Fragment() {
             private fun isNotLoading(): Boolean {
                 return viewModel.isLoading.value == false
             }
-
-
+            
         })
     }
 
