@@ -1,10 +1,20 @@
 package io.github.messiaslima.codewars.entity
 
+import androidx.annotation.NonNull
+import androidx.room.Embedded
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.PrimaryKey
 import java.io.Serializable
 import java.util.*
 
+
+@Entity
 data class Challenge (
-    var id: String? = null,
+
+    @NonNull
+    @PrimaryKey
+    var id: String = "",
     var name: String? = null,
     var slug: String? = null,
     var category: String? = null,
@@ -14,8 +24,13 @@ data class Challenge (
     var languages: List<String>? = null,
     var url: String? = null,
     var createdAt: String? = null,
+
+    @Embedded(prefix = "createdBy_")
     var createdBy: User? = null,
+
+    @Embedded(prefix = "approvedBy_")
     var approvedBy: User? = null,
+
     var description: String? = null,
     var totalAttempts: Long? = null,
     var totalCompleted: Long? = null,

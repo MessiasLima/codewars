@@ -23,7 +23,7 @@ class ChallengesViewModel(
     lateinit var challengeRepository: ChallengeRepository
     private val compositeDisposable = CompositeDisposable()
 
-    private val _isLoading= MutableLiveData<Boolean>()
+    private val _isLoading = MutableLiveData<Boolean>()
     val isLoading : LiveData<Boolean> = _isLoading
 
     private val _challenges = MutableLiveData<List<Challenge>>()

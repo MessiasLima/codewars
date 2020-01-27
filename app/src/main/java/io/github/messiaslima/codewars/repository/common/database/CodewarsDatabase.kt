@@ -7,18 +7,21 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import io.github.messiaslima.codewars.entity.Challenge
 import io.github.messiaslima.codewars.entity.User
 import io.github.messiaslima.codewars.entity.converters.ColorConverter
 import io.github.messiaslima.codewars.entity.converters.DateConverter
 import io.github.messiaslima.codewars.entity.converters.LanguageRankConverter
 import io.github.messiaslima.codewars.entity.converters.StringListConverter
+import io.github.messiaslima.codewars.repository.challenge.datasource.ChallengeLocalDataSource
 import io.github.messiaslima.codewars.repository.user.datasource.UserLocalDataSource
 
 @Database(
     entities = [
-        User::class
+        User::class,
+        Challenge::class
     ],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 @TypeConverters(
@@ -30,6 +33,7 @@ import io.github.messiaslima.codewars.repository.user.datasource.UserLocalDataSo
 abstract class CodewarsDatabase : RoomDatabase() {
 
     abstract fun userLocalDataSource() : UserLocalDataSource
+    abstract fun challengeLocalDataSource(): ChallengeLocalDataSource
 
     companion object {
 
@@ -51,6 +55,7 @@ abstract class CodewarsDatabase : RoomDatabase() {
                 .addMigrations(
                     migration1to2
                 )
+                .fallbackToDestructiveMigration()
                 .build()
         }
     }

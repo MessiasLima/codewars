@@ -92,7 +92,7 @@ class ChallengesFragment : Fragment() {
             private fun isNotLoading(): Boolean {
                 return viewModel.isLoading.value == false
             }
-            
+
         })
     }
 
