@@ -14,7 +14,10 @@ import io.github.messiaslima.codewars.repository.user.datasource.UserLocalDataSo
 class UserRepositoryModule {
 
     @Provides
-    fun provideUserRepository(userAPI: UserAPIDataSource, userDAO: UserLocalDataSource): UserRepository {
+    fun provideUserRepository(
+        userAPI: UserAPIDataSource,
+        userDAO: UserLocalDataSource
+    ): UserRepository {
         return UserRepositoryImpl(userAPI, userDAO)
     }
 }

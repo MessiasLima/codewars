@@ -3,6 +3,7 @@ package io.github.messiaslima.codewars.repository.challenge
 import dagger.Module
 import dagger.Provides
 import io.github.messiaslima.codewars.repository.challenge.datasource.ChallengeAPIDataSource
+import io.github.messiaslima.codewars.repository.challenge.datasource.ChallengeLocalDataSource
 import io.github.messiaslima.codewars.repository.common.api.CodewarsServiceModule
 import io.github.messiaslima.codewars.repository.common.database.CodewarsDatabaseModule
 
@@ -14,9 +15,10 @@ class ChallengeRepsitoryModule {
 
     @Provides
     fun provideChallengeRepository(
-        challengeAPIDataSource: ChallengeAPIDataSource
+        challengeAPIDataSource: ChallengeAPIDataSource,
+        challengeLocalDataSource: ChallengeLocalDataSource
     ): ChallengeRepository{
-        return ChallengeRepositoryImpl(challengeAPIDataSource)
+        return ChallengeRepositoryImpl(challengeAPIDataSource, challengeLocalDataSource)
     }
 
 }

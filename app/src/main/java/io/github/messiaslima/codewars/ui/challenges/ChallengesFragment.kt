@@ -111,7 +111,7 @@ class ChallengesFragment : Fragment() {
         challengesRecyclerView.layoutManager = layoutManager
         challengesRecyclerView.itemAnimator = DefaultItemAnimator()
         challengesRecyclerView.addItemDecoration(DividerItemDecoration(context, layoutManager.orientation))
-        viewModel.challenges.observe(viewLifecycleOwner, Observer(adapter::addChallenges))
+        viewModel.challenges.observe(viewLifecycleOwner, Observer(adapter::submitList))
     }
 
     private fun showChallengeDetails(challenge: Challenge){

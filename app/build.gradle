@@ -105,5 +105,6 @@ dependencies {
 
     // Paging library
     implementation "androidx.paging:paging-runtime:$pagingVersion"
+    implementation "androidx.paging:paging-runtime-ktx:$pagingVersion"
     testImplementation "androidx.paging:paging-common:$pagingVersion"
 }

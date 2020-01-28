@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.paging.PagedList
 import io.github.messiaslima.codewars.entity.Challenge
 import io.github.messiaslima.codewars.entity.User
 import io.github.messiaslima.codewars.repository.challenge.ChallengeRepository
@@ -26,8 +27,9 @@ class ChallengesViewModel(
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading : LiveData<Boolean> = _isLoading
 
-    private val _challenges = MutableLiveData<List<Challenge>>()
-    val challenges: LiveData<List<Challenge>> = _challenges
+    val challenges: LiveData<PagedList<Challenge>> by lazy {
+        challengeRepository.findChallengesV2()
+    }
 
     private var page = 0
     private var firstPageSize: Int? = null
@@ -47,7 +49,6 @@ class ChallengesViewModel(
                 _isLoading.value = false
             }
             .subscribe({ challenges ->
-                _challenges.value = challenges
                 updatePaginationVariables(challenges.size)
             }, { throwable ->
 
