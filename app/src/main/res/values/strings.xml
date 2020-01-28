@@ -2,17 +2,14 @@
     <string name="app_name">Codewars</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="search">Search</string>
     <string name="user_search_field_placeholder">ID or username</string>
-    <string name="user_search">User search</string>
     <string name="completed_challenges">Completed challenges</string>
     <string name="authored_challenges">Authored challenges</string>
     <string name="error_getting_completed_challenges">Occurred an error getting completed challenges</string>
     <string name="end_of_results_message">There\'s no more challenges</string>
     <string name="best_language">Best language: %1$s | Score: %2$d</string>
     <string name="order_by_rank">Order by rank</string>
-    <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="unknown_error">Unknown error</string>
     <string name="user_not_found">User not found</string>
