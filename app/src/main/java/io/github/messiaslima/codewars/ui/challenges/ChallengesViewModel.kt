@@ -28,7 +28,7 @@ class ChallengesViewModel(
     val isLoading : LiveData<Boolean> = _isLoading
 
     val challenges: LiveData<PagedList<Challenge>> by lazy {
-        challengeRepository.findChallengesV2()
+        challengeRepository.findChallenges()
     }
 
     private var page = 0
@@ -42,7 +42,7 @@ class ChallengesViewModel(
 
     private fun searchChallenges(page: Int) {
         _isLoading.value = true
-        challengeRepository.findChallenges(user, challengeType, page)
+        challengeRepository.findChallengesFromAPI(user, challengeType, page)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .doFinally {

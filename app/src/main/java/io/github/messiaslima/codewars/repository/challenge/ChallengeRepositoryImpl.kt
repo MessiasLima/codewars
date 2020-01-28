@@ -18,7 +18,7 @@ class ChallengeRepositoryImpl @Inject constructor(
     private val challengeLocalDataSource: ChallengeLocalDataSource
 ) : ChallengeRepository {
 
-    override fun findChallenges(user: User, challengeType: ChallengeType, page: Int): Single<List<Challenge>> {
+    override fun findChallengesFromAPI(user: User, challengeType: ChallengeType, page: Int): Single<List<Challenge>> {
 
         val responseSingle = when(challengeType){
             ChallengeType.COMPLETED -> challengeAPIDataSource.findCompletedChallenges(user, page)
@@ -28,7 +28,11 @@ class ChallengeRepositoryImpl @Inject constructor(
         return handleResponse(responseSingle)
     }
 
-    override fun findChallengesV2(): LiveData<PagedList<Challenge>> {
+    override fun findChallenges(
+        user: User,
+        challengeType: ChallengeType,
+        page: Int
+    ): LiveData<PagedList<Challenge>> {
 
         val config = Config(
             pageSize = 10,
@@ -36,7 +40,12 @@ class ChallengeRepositoryImpl @Inject constructor(
             maxSize = 50
         )
 
-        return challengeLocalDataSource.findAll().toLiveData(config)
+        val boundaryCallback = ChallengeBoundaryCallback(user, challengeType, page)
+
+        return challengeLocalDataSource.findAll().toLiveData(
+            config = config,
+            boundaryCallback = boundaryCallback
+        )
     }
 
     private fun handleResponse(responseSingle: Single<ChallengesAPIResponse>): Single<List<Challenge>> {
