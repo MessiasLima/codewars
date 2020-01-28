@@ -13,4 +13,6 @@
     <string name="cancel">Cancel</string>
     <string name="unknown_error">Unknown error</string>
     <string name="user_not_found">User not found</string>
+    <string name="empty_list_title">The user list is empty</string>
+    <string name="empty_list_message">Please click on search icon on top bar to find a new user</string>
 </resources>

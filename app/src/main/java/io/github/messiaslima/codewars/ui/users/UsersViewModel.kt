@@ -37,6 +37,10 @@ class UsersViewModel : ViewModel(), SearchUserDialogFragment.OnSearchUserListene
         }
     }
 
+    val isEmptyList = users.map { resource ->
+        resource.data?.size == 0
+    }
+
     private val _userQueryEvent = MutableLiveData<String>()
     private val _userClickedEvent = MutableLiveData<User>()
     private val _userFound = _userQueryEvent.switchMap { query ->

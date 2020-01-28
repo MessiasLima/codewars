@@ -27,13 +27,13 @@ class ChallengesViewModel(
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading : LiveData<Boolean> = _isLoading
 
-    val challenges: LiveData<PagedList<Challenge>> by lazy {
-        challengeRepository.findChallenges()
-    }
-
     private var page = 0
     private var firstPageSize: Int? = null
     private var currentPageSize: Int? = null
+
+    val challenges: LiveData<PagedList<Challenge>> by lazy {
+        challengeRepository.findChallenges(user, challengeType, page)
+    }
 
     init {
         DaggerChallengesComponent.create().inject(this)
