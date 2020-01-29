@@ -4,24 +4,34 @@ import androidx.paging.PagedList
 import io.github.messiaslima.codewars.entity.Challenge
 import io.github.messiaslima.codewars.entity.User
 import io.github.messiaslima.codewars.ui.challenges.ChallengeType
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import java.util.concurrent.Executors
 
 class ChallengeBoundaryCallback(
-    private val user: User,
-    private val challengeType: ChallengeType,
-    private val page: Int
+    private val loadChallengesFromAPI: ((page: Int) -> List<Challenge>?),
+    private val saveChallenges: ((challenges: List<Challenge>)-> Unit)
 ) : PagedList.BoundaryCallback<Challenge>() {
 
-    var loadChallengesFromAPI: ((
-        user: User,
-        challengeType: ChallengeType,
-        page: Int
-    ) -> Unit)? = null
+    private var page = 0
+
 
     override fun onZeroItemsLoaded() {
-        loadChallengesFromAPI?.invoke(user, challengeType, 0)
+        getChallengesAndSave(0)
     }
 
     override fun onItemAtEndLoaded(itemAtEnd: Challenge) {
-        loadChallengesFromAPI?.invoke(user, challengeType, page)
+        getChallengesAndSave(page)
+    }
+
+    private fun getChallengesAndSave(currentPage: Int) {
+        Executors.newSingleThreadExecutor().execute {
+            val challenges = loadChallengesFromAPI.invoke(currentPage)
+            challenges?.let {
+                page++
+                saveChallenges.invoke(it)
+            }
+        }
     }
 }

@@ -9,10 +9,7 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import io.github.messiaslima.codewars.entity.Challenge
 import io.github.messiaslima.codewars.entity.User
-import io.github.messiaslima.codewars.entity.converters.ColorConverter
-import io.github.messiaslima.codewars.entity.converters.DateConverter
-import io.github.messiaslima.codewars.entity.converters.LanguageRankConverter
-import io.github.messiaslima.codewars.entity.converters.StringListConverter
+import io.github.messiaslima.codewars.entity.converters.*
 import io.github.messiaslima.codewars.repository.challenge.datasource.ChallengeLocalDataSource
 import io.github.messiaslima.codewars.repository.user.datasource.UserLocalDataSource
 
@@ -28,7 +25,8 @@ import io.github.messiaslima.codewars.repository.user.datasource.UserLocalDataSo
     StringListConverter::class,
     LanguageRankConverter::class,
     ColorConverter::class,
-    DateConverter::class
+    DateConverter::class,
+    ChallengeTypeConverter::class
 )
 abstract class CodewarsDatabase : RoomDatabase() {
 

@@ -54,46 +54,6 @@ class ChallengesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupChallengesRecyclerView()
         setupLoadingListener()
-        setupScrollListener()
-    }
-
-    private fun setupScrollListener() {
-        challengesRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener(){
-
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                val layoutManager = challengesRecyclerView.layoutManager as LinearLayoutManager
-
-                if (shouldGetNextPage(layoutManager)) {
-                    viewModel.getNextPage()
-                }
-
-                if (
-                    isNotLoading() &&
-                    theLastItemIsVisible(layoutManager) &&
-                    viewModel.itReachedTheEndOfList() &&
-                    !viewModel.endOfListMessageShown
-                ){
-                    showEndOfResultsMessage()
-                }
-
-            }
-
-            private fun shouldGetNextPage(layoutManager: LinearLayoutManager): Boolean{
-                return isNotLoading() &&
-                        theLastItemIsVisible(layoutManager) &&
-                        !viewModel.itReachedTheEndOfList()
-            }
-
-            private fun theLastItemIsVisible(layoutManager: LinearLayoutManager) =
-                layoutManager.findLastVisibleItemPosition() == (challengesRecyclerView.adapter?.itemCount
-                    ?: 0) - 1
-
-            private fun isNotLoading(): Boolean {
-                return viewModel.isLoading.value == false
-            }
-
-        })
     }
 
     private fun setupLoadingListener() {

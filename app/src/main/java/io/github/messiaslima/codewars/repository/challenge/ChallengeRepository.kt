@@ -9,16 +9,9 @@ import io.reactivex.Single
 
 interface ChallengeRepository {
 
-    fun findChallengesFromAPI(
-        user: User,
-        challengeType: ChallengeType,
-        page: Int = 0
-    ): Single<List<Challenge>>
-
     fun findChallenges(
         user: User,
-        challengeType: ChallengeType,
-        page: Int = 0
+        challengeType: ChallengeType
     ): LiveData<PagedList<Challenge>>
 
     fun findChallenge(id: String?): Single<Challenge>
