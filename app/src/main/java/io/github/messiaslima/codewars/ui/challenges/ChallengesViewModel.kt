@@ -33,11 +33,6 @@ class ChallengesViewModel(
 
     init {
         DaggerChallengesComponent.create().inject(this)
-        searchChallenges()
-    }
-
-    private fun searchChallenges() {
-        challengeRepository.findChallenges(user, challengeType)
     }
 
     override fun onCleared() {
