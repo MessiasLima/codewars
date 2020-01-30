@@ -5,6 +5,7 @@ import androidx.paging.PagedList
 import io.github.messiaslima.codewars.entity.Challenge
 import io.github.messiaslima.codewars.entity.User
 import io.github.messiaslima.codewars.ui.challenges.ChallengeType
+import io.github.messiaslima.codewars.util.Resource
 import io.reactivex.Single
 
 interface ChallengeRepository {
@@ -12,7 +13,7 @@ interface ChallengeRepository {
     fun findChallenges(
         user: User,
         challengeType: ChallengeType
-    ): LiveData<PagedList<Challenge>>
+    ): LiveData<Resource<PagedList<Challenge>>>
 
     fun findChallenge(id: String?): Single<Challenge>
 }

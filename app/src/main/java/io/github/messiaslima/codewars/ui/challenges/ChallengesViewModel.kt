@@ -1,17 +1,12 @@
 package io.github.messiaslima.codewars.ui.challenges
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.*
 import androidx.paging.PagedList
 import io.github.messiaslima.codewars.entity.Challenge
 import io.github.messiaslima.codewars.entity.User
 import io.github.messiaslima.codewars.repository.challenge.ChallengeRepository
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
+import io.github.messiaslima.codewars.util.Resource
+import io.github.messiaslima.codewars.util.Status
 import javax.inject.Inject
 
 class ChallengesViewModel(
@@ -19,25 +14,31 @@ class ChallengesViewModel(
     private val challengeType: ChallengeType
 ) : ViewModel() {
 
-    var endOfListMessageShown: Boolean = false
     @Inject
     lateinit var challengeRepository: ChallengeRepository
-    private val compositeDisposable = CompositeDisposable()
 
-    private val _isLoading = MutableLiveData<Boolean>()
-    val isLoading : LiveData<Boolean> = _isLoading
+    var endOfListMessageShown: Boolean = false
 
-    val challenges: LiveData<PagedList<Challenge>> by lazy {
+    private val _challengesResource: LiveData<Resource<PagedList<Challenge>>> by lazy {
         challengeRepository.findChallenges(user, challengeType)
+    }
+
+    private val _challenges by lazy {
+        MediatorLiveData<PagedList<Challenge>>().also { mediator ->
+            mediator.addSource(_challengesResource) { resource ->
+                if (resource.status == Status.SUCCESS) {
+                    mediator.value = resource.data
+                }
+            }
+        }
+    }
+    val challenges: LiveData<PagedList<Challenge>> by lazy { _challenges }
+    val isLoading: LiveData<Boolean> by lazy {
+        _challengesResource.map { it.status == Status.LOADING }
     }
 
     init {
         DaggerChallengesComponent.create().inject(this)
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        compositeDisposable.clear()
     }
 
     class Factory(
