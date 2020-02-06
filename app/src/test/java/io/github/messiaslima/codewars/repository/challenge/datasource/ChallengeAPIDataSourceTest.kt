@@ -6,15 +6,14 @@ import io.github.messiaslima.codewars.repository.common.api.CodewarsService
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
-import junit.framework.Assert.assertEquals
-import junit.framework.Assert.assertTrue
 import okhttp3.Request
 import org.junit.After
-import org.junit.Before
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mock
 import org.mockito.Mockito.`when`
+import org.mockito.Mockito.mock
 import org.mockito.junit.MockitoJUnitRunner
 import retrofit2.Call
 import retrofit2.Callback
@@ -24,20 +23,14 @@ import java.util.*
 @RunWith(MockitoJUnitRunner::class)
 class ChallengeAPIDataSourceTest {
 
-    @Mock
-    lateinit var codewarsService: CodewarsService
-    lateinit var challengeDataSource: ChallengeAPIDataSource
+    private val codewarsService = mock(CodewarsService::class.java)
+    private val challengeDataSource = ChallengeAPIDataSource(codewarsService)
     private val username = "username"
     private val page = 0
     private val compositeDisposable = CompositeDisposable()
 
-    @Before
-    fun setup(){
-        challengeDataSource = ChallengeAPIDataSource(codewarsService)
-    }
-
     @After
-    fun cleanup(){
+    fun cleanup() {
         compositeDisposable.clear()
     }
 
