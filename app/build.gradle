@@ -54,26 +54,27 @@ dependencies {
     def daggerVersion = '2.25.3'
     def retrofitVersion = "2.6.3"
     def roomVersion = "2.2.3"
-    def fragmentKtxVersion = '1.2.0'
+    def fragmentKtxVersion = '1.2.1'
     def pagingVersion = "2.1.1"
 
     // Core
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.1.0'
+    implementation 'androidx.core:core-ktx:1.2.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
     implementation "androidx.fragment:fragment-ktx:$fragmentKtxVersion"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
 
     // Testing
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    testImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:3.0.2'
     testImplementation 'junit:junit:4.12'
     testImplementation "org.mockito:mockito-core:2.25.0"
     testImplementation 'androidx.test:core:1.2.0'
+    testImplementation 'org.robolectric:robolectric:4.3'
 
     // Dagger dependencies
     implementation "com.google.dagger:dagger:$daggerVersion"
